@@ -46,7 +46,7 @@
         "P014",
         "P008"
       ],
-        "vendidos": []
+      "vendidos": []
     },
     {
       "id": 3,
@@ -109,6 +109,25 @@
       "tipo": "comprador",
       "apiId": "v1",
       "id": 6
+    },
+    {
+      "id": 7,
+      "nombre": "Xann",
+      "apellidos": "cabanillas",
+      "email": "Xann@gmail.com",
+      "password": "chomi",
+      "direccion": "uwu",
+      "tipo": "comprador",
+      "imageprofile": "https://ui-avatars.com/api/?name=Xann&background=random",
+      "armario": [
+        "P017"
+      ],
+      "favoritos": [
+        "P003",
+        "P008"
+      ],
+      "publicados": [],
+      "vendidos": []
     }
   ],
   "clothes": [
@@ -121,7 +140,7 @@
       "talla": "M",
       "color": "negro",
       "usuario": 1,
-      "imagen": "https://shopthearena.com/cdn/shop/files/N123MP012-Front-Flat.jpg?v=1736490963",
+      "imagen": "https://home.ripley.com.pe/Attachment/WOP_5/2020275096223/2020275096223_2.jpg",
       "categorias": [
         "C005"
       ],
@@ -136,7 +155,7 @@
       "talla": "32",
       "color": "azul",
       "usuario": 1,
-      "imagen": "https://pieers.com/media/catalog/product/cache/334416996b13b45056f516cf8b55981c/p/e/ped03134czz-1.jpg",
+      "imagen": "https://i.ebayimg.com/thumbs/images/g/jE4AAeSwGdBnq~v3/s-l1200.jpg",
       "categorias": [
         "C001"
       ],
@@ -226,7 +245,7 @@
       "talla": "M",
       "color": "blanco",
       "usuario": 2,
-      "imagen": "https://tu-servidor.com/imagenes/polo-blanco.png",
+      "imagen": "https://i.ebayimg.com/thumbs/images/g/9uMAAeSwM8JoSM6U/s-l1200.jpg",
       "categorias": [
         "C005"
       ],
@@ -287,7 +306,7 @@
       "talla": "S",
       "color": "azul marino",
       "usuario": 5,
-      "imagen": "https://i.ebayimg.com/thumbs/images/g/JFsAAOSwNn9nnqvE/s-l1200.jpg",
+      "imagen": "https://i.ebayimg.com/thumbs/images/g/nMwAAOSwPMZnb2ce/s-l1200.jpg",
       "categorias": [],
       "apiId": "v1"
     },
@@ -315,7 +334,7 @@
       "talla": "42",
       "color": "café",
       "usuario": 2,
-      "imagen": "https://i.ebayimg.com/thumbs/images/g/yuUAAeSwDTNoEZf-/s-l1200.jpg",
+      "imagen": "https://www.corbataslester.com/magazine/wp-content/uploads/2018/01/oxford.jpg",
       "categorias": [
         "C003"
       ],
@@ -348,38 +367,51 @@
       "imagen": "https://estilote.com/wp-content/uploads/2024/12/polo-nina-3.webp",
       "categorias": [],
       "apiId": "v1"
+    },
+    {
+      "id": "P017",
+      "nombre": "Polo zapdos",
+      "descripcion": "polo de pokemon ",
+      "precio": "100",
+      "tipo": "polo",
+      "talla": "L",
+      "color": "amarillo",
+      "usuario": 7,
+      "imagen": "https://www.zonarocket.pe/storage/product/polo-equipo-instinto-amarillo-1691263481.jpg",
+      "categorias": [],
+      "apiId": "v1"
     }
   ],
   "categories": [
     {
       "id": "C001",
       "nombre": "pantalones",
-      "imagen": "https://www.squeeze.pe/assets/upload/producto/5081143887_2.jpg"
+      "imagen": "https://static.vecteezy.com/system/resources/previews/041/408/689/non_2x/ai-generated-blue-jeans-isolated-on-transparent-background-free-png.png"
     },
     {
       "id": "C002",
       "nombre": "vestidos",
-      "imagen": "https://m.media-amazon.com/images/I/617VcmGhnHL._AC_SL1500_.jpg"
+      "imagen": "https://static.vecteezy.com/system/resources/thumbnails/035/645/569/small_2x/ai-generated-woman-dress-isolated-on-transparent-background-created-with-generative-ai-free-png.png"
     },
     {
       "id": "C003",
       "nombre": "zapatillas",
-      "imagen": "https://m.media-amazon.com/images/I/71fXr16ZvvL._AC_SL1100_.jpg"
+      "imagen": "https://static.vecteezy.com/system/resources/thumbnails/047/665/253/small_2x/converse-all-star-high-top-sneakers-png.png"
     },
     {
       "id": "C004",
       "nombre": "gabardinas",
-      "imagen": "https://www.sulmarizala.com/wp-content/uploads/2022/03/SA-002-6-scaled.jpg"
+      "imagen": "https://png.pngtree.com/png-clipart/20240812/original/pngtree-luxury-trench-coats-for-women-png-image_15755237.png"
     },
     {
       "id": "C005",
       "nombre": "polos",
-      "imagen": "https://i.ebayimg.com/images/g/ZC8AAOSw0aZlnWdC/s-l400.jpg"
+      "imagen": "https://static.vecteezy.com/system/resources/thumbnails/044/761/979/small/elegant-black-crew-neck-t-shirt-free-png.png"
     },
     {
       "id": "C006",
       "nombre": "chaquetas",
-      "imagen": "https://i.ebayimg.com/thumbs/images/g/Au0AAOSwLHxm8z9j/s-l1200.jpg"
+      "imagen": "https://png.pngtree.com/png-vector/20240709/ourmid/pngtree-sleek-and-stylish-premium-black-leather-jacket-for-a-timeless-look-png-image_13039562.png"
     },
     {
       "id": "C007",
