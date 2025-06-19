@@ -15,6 +15,7 @@ import Toast from 'primevue/toast';
 // Importa estilos de PrimeVue
 
 import 'primeicons/primeicons.css';
+import Dialog from "primevue/dialog";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -28,5 +29,6 @@ app.use(ToastService);
 app.component('pv-button', Button);
 app.component('pv-input-text', InputText);
 app.component('pv-toast', Toast);
+app.component('pv-dialog', Dialog)
 
 app.mount('#app');

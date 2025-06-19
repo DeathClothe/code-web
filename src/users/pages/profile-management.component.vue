@@ -6,12 +6,12 @@
 
         <div class="profile-tabs">
           <button
-              :class="{ active: activeProfile === 'comprador' }"
-              @click="activeProfile = 'comprador'"
+            :class="{ active: activeProfile === 'comprador' }"
+            @click="activeProfile = 'comprador'"
           >COMPRADOR</button>
           <button
-              :class="{ active: activeProfile === 'vendedor' }"
-              @click="activeProfile = 'vendedor'"
+            :class="{ active: activeProfile === 'vendedor' }"
+            @click="activeProfile = 'vendedor'"
           >VENDEDOR</button>
         </div>
 
@@ -27,7 +27,54 @@
               <img :src="clothes.imagen" alt="Prenda" />
               <div class="heart">♡</div>
             </div>
-            <button class="btn-ver-fav" @click="showFavoritesDialog">Ver catálogo de favoritos</button>
+            <button class="btn-ver-fav" @click="visibleFavoritesList = true">Ver catálogo de favoritos</button>
+
+            <pv-dialog v-model:visible="visibleFavoritesList" class="modal-backdrop" style="background-color: #ffffff; border-radius: 20px; padding: 40px;">
+              <div class="modal-content">
+                <h2 class="section-title">Tus Favoritos</h2>
+                <div class="search-filter">
+                  <input v-model="searchQuery" type="text" placeholder="Buscar prenda..." />
+                  <div class="category-selector">
+                    <div
+                      v-for="category in categories"
+                      :key="category.id"
+                      class="category-item"
+                      @click="selectedCategory = category.id"
+                      :class="{ active: selectedCategory === category.id }"
+                    >
+                      <img :src="category.imagen" alt="Categoría" class="category-image" />
+                      <span class="category-name">{{ category.nombre }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="favorites-list">
+                  <div class="favorite-card"
+                       v-for="clothes in filteredFavorites.slice(startIndex, endIndex)"
+                       :key="clothes.id"
+                       @click="showProductDetail(clothes)">
+                    <img :src="clothes.imagen" alt="Prenda" class="favorite-image" />
+                    <div class="favorite-info">
+                      <h3 class="favorite-nombre">{{ clothes.nombre }}</h3>
+                      <p class="favorite-price">Precio: ${{ clothes.precio }}</p>
+                      <p class="favorite-category">Categoría: {{ clothes.categorias.join(',')}}</p>
+                    </div>
+                    <div class="favorite-heart">♡</div>
+                  </div>
+                </div>
+              </div>
+            </pv-dialog>
+
+          </div>
+          <div v-if="selectedProduct" class="product-modal">
+            <button class="close-btn" @click="selectedProduct = null">×</button>
+            <div class="product-details">
+              <img v-if="selectedProduct.imagen" :src="selectedProduct.imagen" alt="Imagen del producto" />
+              <p v-if="selectedProduct.precio">Precio: ${{ selectedProduct.precio }}</p>
+              <p v-if="selectedProduct.talla">Talla: {{ selectedProduct.talla }}</p>
+              <p v-if="selectedProduct.color">Color: {{ selectedProduct.color }}</p>
+              <p v-if="selectedProduct.vendedor">Vendedor: {{ selectedProduct.vendedor }}</p>
+              <p v-else>Información del producto no disponible.</p>
+            </div>
           </div>
 
           <div v-if="favTab === 'parati'" class="favoritos-list">
@@ -37,22 +84,8 @@
               <img :src="clothes.imagen" alt="Prenda" />
               <div class="star">☆</div>
             </div>
+            <pv-button @click="goToExplore()">Ir a explorar</pv-button>
           </div>
-
-          <Dialog v-if="visibleFavoritesList">
-            <h2 class="section-title">Tus Favoritos</h2>
-            <h2 class="subtext">Aquí están tus prendas favoritas</h2>
-            <div class="favorite-card" v-for="clothes in favoritos" :key="clothes.id" @click="showProductDetail(clothes)">
-              <img :src="clothes.imagen" alt="Prenda" class="favorite-image" />
-              <div class="favorite-info">
-                <h3 class="favorite-nombre">{{ clothes.nombre }}</h3>
-                <p class="favorite-price">Precio: ${{ clothes.precio }}</p>
-                <p class="favorite-category">Categoría: {{ clothes.categorias }}</p>
-              </div>
-              <div class="favorite-heart">♡</div>
-            </div>
-            <Button label="Cerrar" @click="visibleFavoritesList = false" class="p-button-secondary" />
-          </Dialog>
         </div>
 
         <!-- SECCIÓN VENDEDOR -->
@@ -73,9 +106,9 @@
             Lista de prendas vendidas
           </a>
           <SoldClothesModal
-              v-if="showSoldModal"
-              :items="vendidas"
-              @close="showSoldModal = false"
+            v-if="showSoldModal"
+            :items="vendidas"
+            @close="showSoldModal = false"
           />
 
           <!-- SECCIÓN PUBLICADOS -->
@@ -95,26 +128,26 @@
             Lista de prendas publicadas
           </a>
           <PendingClothesModal
-              v-if="showPendingModal"
-              :items="pendientes"
-              @close="showPendingModal = false"
-              @edit="onEditPendingClothe"
+            v-if="showPendingModal"
+            :items="pendientes"
+            @close="showPendingModal = false"
+            @edit="onEditPendingClothe"
           />
           <EditClotheModal
-              v-if="editModalVisible"
-              :clothe="clotheToEdit"
-              :visible="editModalVisible"
-              @close="closeEditClotheModal"
-              @save="onSaveClothe"
-              @remove="onRemoveClothe"
-              @sell="openSellClotheModal"
+            v-if="editModalVisible"
+            :clothe="clotheToEdit"
+            :visible="editModalVisible"
+            @close="closeEditClotheModal"
+            @save="onSaveClothe"
+            @remove="onRemoveClothe"
+            @sell="openSellClotheModal"
           />
           <SellClotheModal
-              v-if="sellModalVisible"
-              :visible="sellModalVisible"
-              :clothe="clotheToSell"
-              @close="closeSellClotheModal"
-              @confirm="onConfirmSell"
+            v-if="sellModalVisible"
+            :visible="sellModalVisible"
+            :clothe="clotheToSell"
+            @close="closeSellClotheModal"
+            @confirm="onConfirmSell"
           />
 
           <!-- SECCIÓN ESTADÍSTICAS DE VENDEDOR -->
@@ -143,9 +176,9 @@
               <span class="label-categorias">Ventas por categoría:</span>
               <div class="categorias-badges">
                 <span
-                    v-for="(cantidad, categoria) in estadisticasVentas.porCategoria"
-                    :key="categoria"
-                    class="badge-categoria"
+                  v-for="(cantidad, categoria) in estadisticasVentas.porCategoria"
+                  :key="categoria"
+                  class="badge-categoria"
                 >
                   {{ categoria }}: <b>{{ cantidad }}</b>
                 </span>
@@ -165,6 +198,9 @@
           <img :src="profile.imagen || 'https://i.imgur.com/XwiWtcq.png'" alt="Perfil Usuario" />
           <p><strong>Correo electrónico:</strong> {{ profile.email }}</p>
           <p><strong>Dirección:</strong> {{ profile.direccion }}</p>
+
+          <!-- Botón de Logout -->
+          <button @click="handleLogout">Cerrar sesión</button>
         </div>
         <div v-else class="profile-image-wrapper">
           <p>No hay datos de perfil disponibles.</p>
@@ -172,18 +208,26 @@
       </div>
     </div>
   </div>
+
+  <!-- Contenedor Toast sólo para el logout -->
+  <Toast
+    position="top-center"
+    group="logout"
+    styleClass="logout-toast"
+  />
 </template>
 
 <script>
+import { AuthService } from "@/users/services/auth.service.js";
 import { useProfileStore } from "@/users/services/profile.store.js";
 import { ProfileService } from "@/users/services/profile.service.js";
 import { ClotheService } from "@/sales/services/clothe.service.js";
-import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import SoldClothesModal from "@/users/components/sold-clothes-modal.vue";
 import PendingClothesModal from "@/users/components/pending-clothes-modal.vue";
 import EditClotheModal from "@/users/components/edit-clothe-modal.vue";
 import SellClotheModal from "@/users/components/sell-clothe-modal.vue";
+import Toast from "primevue/toast";
 
 export default {
   name: "ProfileView",
@@ -193,19 +237,34 @@ export default {
       favTab: 'favoritos',
       pendientes: [],
       selectedProduct: null,
-      visibleFavoritesList: false,
       favoritos: [],
       vendidas: [],
       showSoldModal: false,
       showPendingModal: false,
+      visibleFavoritesList: false,
+      searchQuery: "",
       editModalVisible: false,
       clotheToEdit: null,
       sellModalVisible: false,
       clotheToSell: null,
       clothes: [],
+      selectedCategory: "",
+      page: 0,
+      pageSize: 6,
+      pageSold: 0,
+      pagePending: 0,
+      pageSizeSold: 10,
+      pageSizePending: 10,
+      product: {
+        precio: 50,
+        talla: "M",
+        color: "rojo",
+        imagen: "https://i.ebayimg.com/thumbs/images/g/sp4AAOSwg2RkpCcB/s-l1200.jpg",
+        vendedor: "Juan Pérez"
+      }
     };
   },
-  components: {SoldClothesModal, Dialog, Button, PendingClothesModal, EditClotheModal, SellClotheModal },
+  components: {Toast, SoldClothesModal, Button, PendingClothesModal, EditClotheModal, SellClotheModal },
   computed: {
     profile() {
       return this.profileStore.profile;
@@ -242,18 +301,34 @@ export default {
         topCategoria,
         porCategoria,
       };
-    }
+    },
+
+    filteredFavorites() {
+      return this.favoritos.filter((item) => {
+        const matchesQuery = item.nombre.toLowerCase().includes(this.searchQuery.toLowerCase());
+        const matchesCategory = !this.selectedCategory || item.categorias === this.selectedCategory;
+        return matchesQuery && matchesCategory;
+      });
+    },
+
   },
   setup() {
     const profileStore = useProfileStore();
     const profileService = new ProfileService();
     const clotheService = new ClotheService();
-    return { profileStore, profileService, clotheService };
+
+    // añade una instancia del AuthService
+    const authService    = new AuthService();
+
+    return { profileStore, profileService, clotheService, authService };
   },
   async created() {
     this.profileStore.initialize();
     await this.loadProfileData();
+
+
   },
+
   methods: {
     async loadProfileData() {
       try {
@@ -283,21 +358,29 @@ export default {
     },
 
     goToProductDetail(product) {
-      this.$router.push({ name: 'ProductDetail', params: { productId: product.id } });
+      if (!product || !product.id) {
+        console.error("Producto inválido:", product);
+        return;
+      }
+      this.$router.push({name: 'ProductDetail', params: {productId: product.id}});
     },
     showProductDetail(item) {
+      console.log("Producto seleccionado:", item);
       this.selectedProduct = item;
     },
     showFavoritesDialog() {
       this.visibleFavoritesList = true;
     },
     openEditClotheModal(clothe) {
-      this.clotheToEdit = { ...clothe };
+      this.clotheToEdit = {...clothe};
       this.editModalVisible = true;
     },
     closeEditClotheModal() {
       this.editModalVisible = false;
       this.clotheToEdit = null;
+    },
+    goToExplore() {
+      this.$router.push({path: '/explore'});
     },
     async onSaveClothe(editedClothe) {
       try {
@@ -351,19 +434,23 @@ export default {
       }
     },
     onEditPendingClothe(item) {
-      this.clotheToEdit = { ...item };
+      this.clotheToEdit = {...item};
       this.editModalVisible = true;
       this.showPendingModal = true;
     },
     openSellClotheModal(clothe) {
-      this.clotheToSell = { ...clothe };
+      this.clotheToSell = {...clothe};
       this.sellModalVisible = true;
     },
     closeSellClotheModal() {
       this.sellModalVisible = false;
       this.clotheToSell = null;
     },
-    async onConfirmSell({ comprador, clothe }) {
+    closeFavoritesModal() {
+      this.visibleFavoritesList = false;
+    },
+
+    async onConfirmSell({comprador, clothe}) {
       try {
         const vendedorId = this.profileStore.profile?.id;
         const vendedorProfile = await this.profileService.getById(vendedorId);
@@ -395,9 +482,16 @@ export default {
           life: 3000
         });
       }
-    }
+    },
+    handleLogout() {
+      const authService = new AuthService();
+      authService.logout();
+      this.$router.push('/login'); // Redirige al usuario a la página de inicio de sesión
+    },
+
   }
-};
+}
+
 </script>
 
 
@@ -809,6 +903,52 @@ export default {
   background: #fff;
   display: block;
   margin-bottom: 5px;
+}
+
+
+.logout-button {
+  margin-top: 20px;
+  background-color: #ffb6c1; /* Color rosado */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #ff8fa3; /* Color rosado más oscuro al pasar el mouse */
+}
+
+/* colores y formas del toast de logout */
+:deep(.logout-toast) {
+  --toast-shadow: 0 6px 18px rgba(0,0,0,.15);
+}
+
+:deep(.logout-toast .p-toast-message) {
+  background-color: #ff4d7e;   /* tu rosa primario */
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: var(--toast-shadow);
+}
+
+:deep(.logout-toast .p-toast-message-content) {
+  align-items: center;
+}
+
+:deep(.logout-toast .p-toast-summary) {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+:deep(.logout-toast .p-toast-detail) {
+  font-size: .875rem;
+}
+
+:deep(.logout-toast .p-toast-icon-close) {
+  color: #fff;
 }
 
 </style>

@@ -42,4 +42,14 @@ export class AuthService {
             throw new Error("Error durante el inicio de sesión. Por favor, intenta de nuevo.");
         }
     }
+
+  logout() {
+    // Si más adelante tu backend expone un endpoint de logout,
+    // aquí harías `await httpInstance.post('/logout')`
+    localStorage.removeItem('profile'); // Limpia el almacenamiento local
+    // Si guardas tokens en otro key, elimínalo también
+    localStorage.removeItem('authToken'); // Ejemplo de eliminación de un token
+  }
+
+
 }
