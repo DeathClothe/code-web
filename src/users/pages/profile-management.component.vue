@@ -200,7 +200,7 @@
           <p><strong>Dirección:</strong> {{ profile.direccion }}</p>
 
           <!-- Botón de Logout -->
-          <button @click="handleLogout">Cerrar sesión</button>
+          <button class="logout-button" @click="handleLogout">Cerrar sesión</button>
         </div>
         <div v-else class="profile-image-wrapper">
           <p>No hay datos de perfil disponibles.</p>
@@ -484,9 +484,23 @@ export default {
       }
     },
     handleLogout() {
-      const authService = new AuthService();
-      authService.logout();
-      this.$router.push('/login'); // Redirige al usuario a la página de inicio de sesión
+     // Limpia datos de autenticación
+      this.authService.logout();
+      this.profileStore.clearProfile();
+
+      // Muestra el pop-up de confirmación
+      this.$toast.add({
+        group   : 'logout',
+        severity: 'success',
+        summary : 'Éxito',
+        detail  : 'Sesión cerrada correctamente',
+        life    : 3000 // Visible por 3s
+      });
+
+      // Espera un segundo y luego redirige al login
+      setTimeout(() => {
+        this.$router.push('/login');
+      }, 1000); // 1s de espera
     },
 
   }
