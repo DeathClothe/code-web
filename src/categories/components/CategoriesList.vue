@@ -10,14 +10,14 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import httpInstance from "@/shared/services/http.instance.js";
 import CategorieCard from "./CategorieCard.vue";
+import httpInstance from "@/shared/services/http.instance.js";
 
 const categories = ref([]);
 
 const fetchCategories = async () => {
   try {
-    const response = await httpInstance.get("/categories"); // Ajusta la URL de tu API
+    const response = await httpInstance.get("/categories");
     categories.value = response.data;
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -32,8 +32,7 @@ onMounted(() => {
 <style scoped>
 .categories-list {
   display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding: 12px;
+  gap: 20px;
+  padding: 10px 0;
 }
 </style>
