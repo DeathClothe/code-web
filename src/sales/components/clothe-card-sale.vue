@@ -1,8 +1,8 @@
 <template>
   <div class="clothe-card-sale">
-    <router-link :to="`/clothe/${clothe.id}`">
-      <img :src="clothe.imagen" :alt="clothe.nombre" class="clothe-image" />
-    </router-link>
+    <div class="clothing-card" @click="navigateToDetail">
+      <img :src="clothe.imagen" :alt="clothe.nombre" />
+    </div>
     <div class="clothe-info">
       <h3>{{ clothe.nombre }}</h3>
       <p>Precio: S/{{ clothe.precio }}</p>
@@ -35,6 +35,9 @@ export default {
     },
   },
   methods: {
+    navigateToDetail() {
+      this.$router.push(`/clothing/${this.clothe.id}`);
+    },
     async toggleFavorite() {
       if (!this.profileStore.profile) {
         alert("Debes iniciar sesión para agregar favoritos.");
@@ -83,12 +86,11 @@ export default {
   align-items: center;
 }
 
-.clothe-image {
-  width: 120px;
-  height: 150px;
+.clothing-card img {
+  width: 150px;
+  height: 200px;
+  border-radius: 5px;
   object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
 }
 
 .clothe-info {
@@ -105,5 +107,15 @@ export default {
   font-size: 0.95rem;
   color: #555;
   margin: 2px 0;
+}
+
+.clothing-card {
+  background-color: #f8d7da;
+  border-radius: 10px;
+  text-align: center;
+  padding: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 </style>
