@@ -1,18 +1,23 @@
 <template>
   <div class="clothe-card-sale">
+    <!-- Corazón arriba a la derecha -->
+    <span class="heart-icon" @click.stop="toggleFavorite">
+      {{ isFavorite ? "❤️" : "🖤" }}
+    </span>
+
+    <!-- Imagen clickeable -->
     <div class="clothing-card" @click="navigateToDetail">
       <img :src="clothe.imagen" :alt="clothe.nombre" />
     </div>
+
+    <!-- Info de prenda -->
     <div class="clothe-info">
       <h3>{{ clothe.nombre }}</h3>
-      <p>Precio: S/{{ clothe.precio }}</p>
-      <!-- Corazón clickeable -->
-      <button @click="toggleFavorite">
-        <span class="heart-icon">{{ isFavorite ? "❤️" : "🤍" }}</span>
-      </button>
+      <p>S/{{ clothe.precio }}</p>
     </div>
   </div>
 </template>
+
 
 <script>
 import { useProfileStore } from "@/users/services/profile.store.js";
@@ -68,54 +73,64 @@ export default {
 </script>
 
 <style scoped>
-.heart-icon {
-  font-size: 1.8rem;
-  cursor: pointer;
-  user-select: none;
-  margin-left: 10px;
-}
+
 .clothe-card-sale {
   position: relative;
-  background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 15px;
-  width: 180px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.clothing-card img {
-  width: 150px;
-  height: 200px;
-  border-radius: 5px;
-  object-fit: cover;
-}
-
-.clothe-info {
+  background: transparent;
+  width: 240px; /* Más ancho */
   text-align: center;
+  margin: 15px;
+  padding: 8px;
 }
 
+/* Caja blanca más amplia */
+.clothing-card {
+  background: white;
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  width: 200px;
+  height: 230px;
+}
+
+/* Imagen más ancha y alta */
+.clothing-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+
+}
+.clothing-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Texto más proporcional */
 .clothe-info h3 {
   font-size: 1.1rem;
-  margin-bottom: 5px;
-  color: #333;
+  margin: 10px 0 4px;
+  color: #000;
 }
 
 .clothe-info p {
-  font-size: 0.95rem;
-  color: #555;
-  margin: 2px 0;
+  margin: 0;
+  font-size: 1rem;
+  color: #444;
 }
 
-.clothing-card {
-  background-color: #f8d7da;
-  border-radius: 10px;
-  text-align: center;
-  padding: 15px;
+/* Corazón en posición */
+.heart-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.7rem;
   cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+.heart-icon:hover {
+  transform: scale(1.25);
 }
 </style>
