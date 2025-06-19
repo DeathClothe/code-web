@@ -1,7 +1,9 @@
 <template>
   <div class="categorie-card">
-    <img :src="categorie.imagen" alt="categoria imagen" />
-    <div class="categorie-title">{{ categorie.title }}</div>
+    <div class="categorie-image-box">
+      <img :src="categorie.imagen" alt="categoria imagen" />
+    </div>
+    <div class="categorie-title">{{ categorie.nombre }}</div>
   </div>
 </template>
 
@@ -16,42 +18,42 @@ defineProps({
 
 <style scoped>
 .categorie-card {
-  background-color: #f8f0f0; /* tono rosa más suave */
-  border-radius: 12px;
-  padding: 10px;
-  width: 180px; /* más compacto */
-  text-align: center;
-  user-select: none;
-  cursor: pointer;
-  transition: transform 0.2s;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* sombra ligera */
+  width: 180px;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 .categorie-card:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
 }
 
-.categorie-card img {
-  width: 160px;
+.categorie-image-box {
+  background-color: #f5b9cb;
+  border-radius: 16px;
+  width: 100%;
   height: 180px;
-  border-radius: 12px;
-  object-fit: cover;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.categorie-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .categorie-title {
-  margin-top: 12px;
+  margin-top: 10px;
   font-weight: 600;
   font-size: 16px;
-  color: #333;
-  white-space: normal;
-  line-height: 1.3;
-  width: 100%;
+  color: #000;
   text-align: center;
-  user-select: text;
 }
 </style>
