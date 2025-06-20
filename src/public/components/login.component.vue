@@ -76,11 +76,16 @@ export default {
     async login() {
       try {
         const user = await this.authService.login(this.email, this.password);
+        this.profileStore.setProfile(user);
+        console.log("✅ Perfil guardado:", this.profileStore.profile);
+
 
 
         if (user) {
           this.profileStore.setProfile(user);
           console.log("✅ Perfil guardado:", this.profileStore.profile);
+          console.log("👀 ID guardado:", this.profileStore.profile?.id);
+
           await this.$router.push("/start");
         } else {
           this.loginError = "Correo electrónico o contraseña incorrectos.";
