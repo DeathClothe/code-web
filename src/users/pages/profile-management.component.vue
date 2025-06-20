@@ -195,7 +195,7 @@
       <!-- Panel derecho -->
       <div class="right-panel">
         <div v-if="profile" class="profile-image-wrapper">
-          <img :src="profile.imagen || 'https://i.imgur.com/XwiWtcq.png'" alt="Perfil Usuario" />
+          <img :src="profile.imageprofile " alt="Perfil Usuario" />
           <p><strong>Correo electrónico:</strong> {{ profile.email }}</p>
           <p><strong>Dirección:</strong> {{ profile.direccion }}</p>
 

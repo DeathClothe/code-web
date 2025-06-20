@@ -9,7 +9,6 @@ import RegisterComponent from "@/public/components/register.component.vue";
 import LoginComponent from "@/public/components/login.component.vue";
 import { useProfileStore } from "@/users/services/profile.store.js";
 import ProfileManagementComponent from "@/users/pages/profile-management.component.vue";
-import EditProfile from "@/users/pages/editProfile.vue";
 import ClotheDetailComponent from "@/sales/components/clothe-detail.component.vue";
 
 const routes = [
@@ -21,7 +20,6 @@ const routes = [
     { path: '/wardrobe', component: Wardrobe, meta: { requiresAuth: true } },
     { path: '/favorites', component: Favorites, meta: { requiresAuth: true } },
     { path: '/profile', name: 'profile', component: ProfileManagementComponent },
-    { path: '/edit-profile', name: 'edit-profile', component: EditProfile, meta: { requiresAuth: true } },
     {path: '/product/:productId', name: 'ProductDetail', component:  () => import('@/users/pages/ProductDetail.vue'),
     },
     { path: '/categoria/:id', name: 'CategoryDetail', component: () => import('@/categories/components/CategoryDetail.vue'), meta: { requiresAuth: true } },
