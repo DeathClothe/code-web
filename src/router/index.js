@@ -24,6 +24,7 @@ const routes = [
     { path: '/edit-profile', name: 'edit-profile', component: EditProfile, meta: { requiresAuth: true } },
     {path: '/product/:productId', name: 'ProductDetail', component:  () => import('@/users/pages/ProductDetail.vue'),
     },
+    { path: '/categoria/:id', name: 'CategoryDetail', component: () => import('@/categories/components/CategoryDetail.vue'), meta: { requiresAuth: true } },
     {  path: '/clothing/:id', name: 'clothing-detail', component: ClotheDetailComponent,
         meta: { requiresAuth: true }}
 ];
