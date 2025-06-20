@@ -69,32 +69,28 @@ export default {
     const toast = useToast();
     const router = useRouter();
     const profileStore = useProfileStore();
-    return { toast, router, profileStore };
+    const authService = new AuthService();
+    return { toast, router, profileStore,authService  };
   },
   methods: {
     async login() {
-      if (!this.email || !this.password) {
-        this.loginError = "Por favor completa todos los campos.";
-        return;
-      }
-
       try {
-        const authService = new AuthService();
-        const profile = await authService.login(this.email, this.password);
+        const user = await this.authService.login(this.email, this.password);
 
-        if (profile) {
 
-          this.profileStore.setProfile(profile);
-
-          await this.router.push("/start");
+        if (user) {
+          this.profileStore.setProfile(user);
+          console.log("✅ Perfil guardado:", this.profileStore.profile);
+          await this.$router.push("/start");
         } else {
           this.loginError = "Correo electrónico o contraseña incorrectos.";
         }
       } catch (error) {
-        this.loginError = "Error al iniciar sesión. Por favor, intenta de nuevo.";
-        console.error("Login error:", error);
+        console.error("❌ Error en login:", error);
+        this.loginError = "Error al iniciar sesión.";
       }
-    },
+    }
+  ,
     goToRegister() {
       this.router.push("/register");
     }
