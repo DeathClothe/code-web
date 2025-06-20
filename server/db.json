@@ -124,7 +124,8 @@
       ],
       "favoritos": [
         "P003",
-        "P008"
+        "P008",
+        "P002"
       ],
       "publicados": [],
       "vendidos": []
@@ -261,7 +262,7 @@
       "talla": "34",
       "color": "verde militar",
       "usuario": 3,
-      "imagen": "https://tu-servidor.com/imagenes/pantalon-cargo.png",
+      "imagen": "https://cdn-images.farfetch-contents.com/21/92/09/72/21920972_53029169_600.jpg",
       "categorias": [
         "C001"
       ],
@@ -276,7 +277,7 @@
       "talla": "S",
       "color": "rojo",
       "usuario": 3,
-      "imagen": "https://tu-servidor.com/imagenes/vestido-fiesta.png",
+      "imagen": "https://m.media-amazon.com/images/I/61i6pXPv7xL._AC_SL1500_.jpg",
       "categorias": [
         "C002"
       ],
@@ -416,17 +417,17 @@
     {
       "id": "C007",
       "nombre": "camisas",
-      "imagen": "https://www.prolaboral.com/182470-home_default/camisa-m-c-mujer-velilla-405010.jpg"
+      "imagen": "https://www.crafters.fr/images/stories/virtuemart/sols20/670_chemise_femme_stretch_manches_longues_blake_women_black_face.png"
     },
     {
       "id": "C008",
       "nombre": "accesorios",
-      "imagen": "https://i.ebayimg.com/thumbs/images/g/h4wAAOSwj1toAU0f/s-l1200.jpg"
+      "imagen": "https://static.vecteezy.com/system/resources/previews/037/210/393/non_2x/ai-generated-man-waist-belt-on-transparent-background-ai-generated-free-png.png"
     },
     {
       "id": "C009",
       "nombre": "suéteres",
-      "imagen": "https://m.media-amazon.com/images/I/61XxKTWKMWL._AC_UY1000_.jpg"
+      "imagen": "https://static.vecteezy.com/system/resources/previews/026/431/510/non_2x/cozy-sweater-isolated-png.png"
     }
   ]
 }
