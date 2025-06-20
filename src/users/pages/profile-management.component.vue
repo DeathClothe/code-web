@@ -331,8 +331,11 @@ export default {
 
   methods: {
     async loadProfileData() {
+       console.log("🧠 Perfil en el store al cargar:", this.profileStore.profile);
+  console.log("🆔 ID en el perfil:", this.profileStore.profile?.id);
       try {
         const profile = this.profileStore.profile;
+        
         if (!profile) return;
 
         const favoritosIds = profile.favoritos || [];
