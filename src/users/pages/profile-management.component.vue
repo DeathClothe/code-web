@@ -336,21 +336,42 @@ export default {
         if (!userId) return;
 
         const fullProfile = await this.profileService.getById(userId);
+        console.log("Perfil cargado:", fullProfile);
+
         const favoritosIds = fullProfile.favoritos || [];
         const publicadosIds = fullProfile.publicados || [];
         const vendidosIds = fullProfile.vendidos || [];
 
-        const favoritosPromises = favoritosIds.map(id => this.clotheService.getById(id));
+        // DEBUG: Mostrar todos los IDs por separado
+        console.log("Favoritos IDs:", favoritosIds);
+        console.log("Publicados IDs:", publicadosIds);
+        console.log("Vendidos IDs:", vendidosIds);
+
+        // DEBUG: Ver qué IDs se están intentando buscar
+        const favoritosPromises = favoritosIds.map(async id => {
+          console.log("Buscando favorito:", id);
+          const clothe = await this.clotheService.getById(id);
+          console.log("Resultado favorito:", clothe);
+          return clothe;
+        });
         this.favoritos = (await Promise.all(favoritosPromises)).filter(p => p);
 
-       
-        const publicadosPromises = publicadosIds.map(id => this.clotheService.getById(id));
+        const publicadosPromises = publicadosIds.map(async id => {
+          console.log("Buscando publicado:", id);
+          const clothe = await this.clotheService.getById(id);
+          console.log("Resultado publicado:", clothe);
+          return clothe;
+        });
         this.pendientes = (await Promise.all(publicadosPromises)).filter(p => p);
         console.log("Pendientes cargados:", this.pendientes);
 
-        const vendidosPromises = vendidosIds.map(id => this.clotheService.getById(id));
+        const vendidosPromises = vendidosIds.map(async id => {
+          console.log("Buscando vendido:", id);
+          const clothe = await this.clotheService.getById(id);
+          console.log("Resultado vendido:", clothe);
+          return clothe;
+        });
         this.vendidas = (await Promise.all(vendidosPromises)).filter(p => p);
-
 
         this.clothes = await this.clotheService.getAll();
 
