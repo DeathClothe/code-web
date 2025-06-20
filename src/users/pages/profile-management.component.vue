@@ -332,15 +332,13 @@ export default {
   methods: {
     async loadProfileData() {
       try {
-        const userId = this.profileStore.profile?.id;
-        if (!userId) return;
+        const profile = this.profileStore.profile;
+        if (!profile) return;
 
-        const fullProfile = await this.profileService.getById(userId);
-        console.log("Perfil cargado:", fullProfile);
+        const favoritosIds = profile.favoritos || [];
+        const publicadosIds = profile.publicados || [];
+        const vendidosIds = profile.vendidos || [];
 
-        const favoritosIds = fullProfile.favoritos || [];
-        const publicadosIds = fullProfile.publicados || [];
-        const vendidosIds = fullProfile.vendidos || [];
 
         // DEBUG: Mostrar todos los IDs por separado
         console.log("Favoritos IDs:", favoritosIds);
