@@ -1,11 +1,13 @@
+<!-- CategoryCard.vue -->
 <template>
-  <div class="categorie-card">
+  <div class="categorie-card" @click="$emit('select', categorie)">
     <div class="categorie-image-box">
       <img :src="categorie.imagen" alt="categoria imagen" />
     </div>
     <div class="categorie-title">{{ categorie.nombre }}</div>
   </div>
 </template>
+
 
 <script setup>
 defineProps({
