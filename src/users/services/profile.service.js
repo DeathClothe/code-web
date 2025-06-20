@@ -10,6 +10,14 @@ export class ProfileService extends BaseService {
         return httpInstance.get(`${this.resourceEndpoint}?tipo=${type}`)
             .then(r => r.data);
     }
+getById(id) {
+  return httpInstance.get(`${this.resourceEndpoint}/${id}`)
+    .then(r => r.data)
+    .catch(error => {
+      console.error(`Error fetching profile with ID ${id}`, error);
+      return null;
+    });
+}
 
     getByEmail(email) {
         return httpInstance.get(`${this.resourceEndpoint}?email=${email}`)
