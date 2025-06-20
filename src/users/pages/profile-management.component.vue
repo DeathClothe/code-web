@@ -343,8 +343,10 @@ export default {
         const favoritosPromises = favoritosIds.map(id => this.clotheService.getById(id));
         this.favoritos = (await Promise.all(favoritosPromises)).filter(p => p);
 
+       
         const publicadosPromises = publicadosIds.map(id => this.clotheService.getById(id));
         this.pendientes = (await Promise.all(publicadosPromises)).filter(p => p);
+        console.log("Pendientes cargados:", this.pendientes);
 
         const vendidosPromises = vendidosIds.map(id => this.clotheService.getById(id));
         this.vendidas = (await Promise.all(vendidosPromises)).filter(p => p);
