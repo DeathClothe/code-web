@@ -98,6 +98,7 @@ export default {
   background-color: #ffebed;
   padding: 20px;
   font-family: 'K2D', sans-serif;
+   min-height: 100vh;
 }
 
 .section {
