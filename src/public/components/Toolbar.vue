@@ -19,6 +19,16 @@
 
     <!-- Buscar y Perfil -->
     <div class="toolbar-right">
+      <div class="lang-switcher">
+        <button
+            :class="{ active: activeLang === 'ESP' }"
+            @click="setLang('ESP')"
+        >ESP</button>
+        <button
+            :class="{ active: activeLang === 'ENG' }"
+            @click="setLang('ENG')"
+        >ENG</button>
+      </div>
       <div class="search-container">
         <input
             type="text"
@@ -61,6 +71,9 @@ export default {
         this.$router.push({ name: 'search', query: { q: this.searchQuery } });
         this.searchQuery = '';
       }
+    },
+    setLang(lang) {
+      this.activeLang = lang;
     }
 
   }
@@ -141,5 +154,39 @@ export default {
 .toolbar-left .logo img {
   height: 100px;
   margin-right: 20px;
+}
+
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.lang-switcher button {
+  background: #fff;
+  color: #c4456b;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 18px;
+  margin-right: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  outline: none;
+}
+
+.lang-switcher button.active {
+  background: #c4456b;
+  color: #fff;
+}
+
+.lang-switcher button:last-child {
+  margin-right: 0;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
 }
 </style>
