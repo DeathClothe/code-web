@@ -6,12 +6,12 @@
 
         <div class="profile-tabs">
           <button
-            :class="{ active: activeProfile === 'comprador' }"
-            @click="activeProfile = 'comprador'"
+              :class="{ active: activeProfile === 'comprador' }"
+              @click="activeProfile = 'comprador'"
           >COMPRADOR</button>
           <button
-            :class="{ active: activeProfile === 'vendedor' }"
-            @click="activeProfile = 'vendedor'"
+              :class="{ active: activeProfile === 'vendedor' }"
+              @click="activeProfile = 'vendedor'"
           >VENDEDOR</button>
         </div>
 
@@ -36,11 +36,11 @@
                   <input v-model="searchQuery" type="text" placeholder="Buscar prenda..." />
                   <div class="category-selector">
                     <div
-                      v-for="category in categories"
-                      :key="category.id"
-                      class="category-item"
-                      @click="selectedCategory = category.id"
-                      :class="{ active: selectedCategory === category.id }"
+                        v-for="category in categories"
+                        :key="category.id"
+                        class="category-item"
+                        @click="selectedCategory = category.id"
+                        :class="{ active: selectedCategory === category.id }"
                     >
                       <img :src="category.imagen" alt="Categoría" class="category-image" />
                       <span class="category-name">{{ category.nombre }}</span>
@@ -106,9 +106,9 @@
             Lista de prendas vendidas
           </a>
           <SoldClothesModal
-            v-if="showSoldModal"
-            :items="vendidas"
-            @close="showSoldModal = false"
+              v-if="showSoldModal"
+              :items="vendidas"
+              @close="showSoldModal = false"
           />
 
           <!-- SECCIÓN PUBLICADOS -->
@@ -128,26 +128,26 @@
             Lista de prendas publicadas
           </a>
           <PendingClothesModal
-            v-if="showPendingModal"
-            :items="pendientes"
-            @close="showPendingModal = false"
-            @edit="onEditPendingClothe"
+              v-if="showPendingModal"
+              :items="pendientes"
+              @close="showPendingModal = false"
+              @edit="onEditPendingClothe"
           />
           <EditClotheModal
-            v-if="editModalVisible"
-            :clothe="clotheToEdit"
-            :visible="editModalVisible"
-            @close="closeEditClotheModal"
-            @save="onSaveClothe"
-            @remove="onRemoveClothe"
-            @sell="openSellClotheModal"
+              v-if="editModalVisible"
+              :clothe="clotheToEdit"
+              :visible="editModalVisible"
+              @close="closeEditClotheModal"
+              @save="onSaveClothe"
+              @remove="onRemoveClothe"
+              @sell="openSellClotheModal"
           />
           <SellClotheModal
-            v-if="sellModalVisible"
-            :visible="sellModalVisible"
-            :clothe="clotheToSell"
-            @close="closeSellClotheModal"
-            @confirm="onConfirmSell"
+              v-if="sellModalVisible"
+              :visible="sellModalVisible"
+              :clothe="clotheToSell"
+              @close="closeSellClotheModal"
+              @confirm="onConfirmSell"
           />
 
           <!-- SECCIÓN ESTADÍSTICAS DE VENDEDOR -->
@@ -176,9 +176,9 @@
               <span class="label-categorias">Ventas por categoría:</span>
               <div class="categorias-badges">
                 <span
-                  v-for="(cantidad, categoria) in estadisticasVentas.porCategoria"
-                  :key="categoria"
-                  class="badge-categoria"
+                    v-for="(cantidad, categoria) in estadisticasVentas.porCategoria"
+                    :key="categoria"
+                    class="badge-categoria"
                 >
                   {{ categoria }}: <b>{{ cantidad }}</b>
                 </span>
@@ -195,25 +195,40 @@
       <!-- Panel derecho -->
       <div class="right-panel">
         <div v-if="profile" class="profile-image-wrapper">
-          <img :src="profile.imageprofile " alt="Perfil Usuario" />
-          <p><strong>Correo electrónico:</strong> {{ profile.email }}</p>
-          <p><strong>Dirección:</strong> {{ profile.direccion }}</p>
-
-          <!-- Botón de Logout -->
-          <button class="logout-button" @click="handleLogout">Cerrar sesión</button>
+          <div class="edit-profile-btn-wrapper">
+            <button class="edit-profile-btn" @click="editProfileVisible = true">Editar perfil</button>
+          </div>
+          <img :src="profile.imageprofile" alt="Perfil Usuario" class="profile-img" />
+          <div class="profile-data">
+            <p><strong>Nombre:</strong> {{ profile.nombre }}</p>
+            <p><strong>Apellidos:</strong> {{ profile.apellidos }}</p>
+            <p><strong>Correo:</strong> {{ profile.email }}</p>
+            <p><strong>Dirección:</strong> {{ profile.direccion }}</p>
+            <p><strong>Tipo:</strong> {{ profile.tipo }}</p>
+          </div>
+          <div class="logout-btn-wrapper">
+            <button class="logout-button" @click="handleLogout">Cerrar sesión</button>
+          </div>
         </div>
         <div v-else class="profile-image-wrapper">
           <p>No hay datos de perfil disponibles.</p>
         </div>
+        <EditProfileModal
+            v-if="editProfileVisible"
+            :visible="editProfileVisible"
+            :profile="profile"
+            @update:visible="editProfileVisible = $event"
+            @save="onSaveProfile"
+        />
       </div>
     </div>
   </div>
 
   <!-- Contenedor Toast sólo para el logout -->
   <Toast
-    position="top-center"
-    group="logout"
-    styleClass="logout-toast"
+      position="top-center"
+      group="logout"
+      styleClass="logout-toast"
   />
 </template>
 
@@ -227,6 +242,7 @@ import SoldClothesModal from "@/users/components/sold-clothes-modal.vue";
 import PendingClothesModal from "@/users/components/pending-clothes-modal.vue";
 import EditClotheModal from "@/users/components/edit-clothe-modal.vue";
 import SellClotheModal from "@/users/components/sell-clothe-modal.vue";
+import EditProfileModal from "@/users/components/edit-profile-modal.vue";
 import Toast from "primevue/toast";
 
 export default {
@@ -246,6 +262,7 @@ export default {
       editModalVisible: false,
       clotheToEdit: null,
       sellModalVisible: false,
+      editProfileVisible: false,
       clotheToSell: null,
       clothes: [],
       selectedCategory: "",
@@ -264,7 +281,7 @@ export default {
       }
     };
   },
-  components: {Toast, SoldClothesModal, Button, PendingClothesModal, EditClotheModal, SellClotheModal },
+  components: {Toast, SoldClothesModal, Button, PendingClothesModal, EditClotheModal, SellClotheModal, EditProfileModal },
   computed: {
     profile() {
       return this.profileStore.profile;
@@ -331,11 +348,11 @@ export default {
 
   methods: {
     async loadProfileData() {
-       console.log("🧠 Perfil en el store al cargar:", this.profileStore.profile);
-  console.log("🆔 ID en el perfil:", this.profileStore.profile?.id);
+      console.log("🧠 Perfil en el store al cargar:", this.profileStore.profile);
+      console.log("🆔 ID en el perfil:", this.profileStore.profile?.id);
       try {
         const profile = this.profileStore.profile;
-        
+
         if (!profile) return;
 
         const favoritosIds = profile.favoritos || [];
@@ -375,7 +392,6 @@ export default {
         this.vendidas = (await Promise.all(vendidosPromises)).filter(p => p);
 
         this.clothes = await this.clotheService.getAll();
-
       } catch (error) {
         console.error("Error al cargar datos del perfil:", error);
       }
@@ -507,8 +523,36 @@ export default {
         });
       }
     },
+    async onSaveProfile(editedProfile) {
+      try {
+        const userId = this.profileStore.profile?.id;
+        if (!userId) return;
+        const updatedProfile = { ...this.profileStore.profile, ...editedProfile };
+        await this.profileService.update(userId, updatedProfile);
+
+        // Obtén el perfil actualizado del backend
+        const freshProfile = await this.profileService.getById(userId);
+        this.profileStore.setProfile(freshProfile); // Actualiza el store y el localStorage
+
+        await this.loadProfileData();
+        this.editProfileVisible = false;
+        this.$toast.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Perfil actualizado correctamente',
+          life: 3000
+        });
+      } catch (error) {
+        this.$toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo actualizar el perfil',
+          life: 3000
+        });
+      }
+    },
     handleLogout() {
-     // Limpia datos de autenticación
+      // Limpia datos de autenticación
       this.authService.logout();
       this.profileStore.clearProfile();
 
@@ -640,20 +684,138 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: 320px;
 }
 
-.profile-image-wrapper img {
-  border-radius: 50% 50% 50% 50% / 45% 60% 40% 60%;
+.profile-image-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.profile-img {
   width: 180px;
-  margin-bottom: 30px;
+  height: 180px;
   object-fit: cover;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  box-shadow: 0 8px 32px rgba(228, 115, 143, 0.25), 0 2px 8px rgba(0,0,0,0.08);
+  margin: 0 auto 28px auto;
+  display: block;
+  background: linear-gradient(135deg, #ffd2dd 0%, #e4738f 100%);
+  transition: transform 0.2s;
+}
+.profile-img:hover {
+  transform: scale(1.04) rotate(-2deg);
 }
 
-.profile-image-wrapper p {
-  color: black;
+.profile-data {
+  width: 100%;
+  padding: 18px 0 18px 22px;
+  margin-bottom: 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-left: 5px solid;
+  border-image: linear-gradient(180deg, #e4738f 0%, #ffd2dd 100%) 1;
+  box-shadow: 0 2px 18px rgba(180,110,126,0.10);
+  background: none;
+  position: relative;
+  transition: box-shadow 0.2s;
+}
+
+.profile-data p {
+  color: #fff;
   font-weight: 600;
-  text-align: center;
-  margin: 15px 0 10px 0;
+  margin: 10px 0 10px 0;
+  text-align: left;
+  font-size: 1.18rem;
+  letter-spacing: 0.01em;
+  position: relative;
+  padding-left: 0;
+  transition: color 0.2s;
+  cursor: pointer;
+  text-shadow: 0 1px 6px rgba(180,110,126,0.18), 0 1px 0 #e4738f;
+}
+
+.profile-data p::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #fff 0%, #ffd2dd 100%);
+  border-radius: 2px;
+  transition: width 0.3s;
+  margin-top: 3px;
+}
+
+.profile-data p:hover {
+  color: #ffd2dd;
+}
+
+.profile-data p:hover::after {
+  width: 80%;
+}
+
+.profile-data p strong {
+  color: #ffd2dd;
+  font-weight: 800;
+  margin-right: 8px;
+  font-size: 1.13em;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 6px #e4738f, 0 1px 0 #fff;
+}
+
+.logout-btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.logout-button {
+  background-color: #ffd2dd;
+  color: #b46e7e;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 8px rgba(180,110,126,0.07);
+}
+
+.logout-button:hover {
+  color: white;
+  background-color: #ff8fa3;
+}
+
+.edit-profile-btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.edit-profile-btn {
+  background-color: #ffd2dd;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 12px;
+  color: #b46e7e;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.edit-profile-btn:hover {
+  color: white;
+  background-color: #ff8fa3;
 }
 
 .profile-tabs {
@@ -943,23 +1105,6 @@ export default {
   margin-bottom: 5px;
 }
 
-
-.logout-button {
-  margin-top: 20px;
-  background-color: #ffb6c1; /* Color rosado */
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.logout-button:hover {
-  background-color: #ff8fa3; /* Color rosado más oscuro al pasar el mouse */
-}
-
 /* colores y formas del toast de logout */
 :deep(.logout-toast) {
   --toast-shadow: 0 6px 18px rgba(0,0,0,.15);
@@ -988,5 +1133,4 @@ export default {
 :deep(.logout-toast .p-toast-icon-close) {
   color: #fff;
 }
-
 </style>
