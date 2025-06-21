@@ -102,6 +102,7 @@ export default {
 .explore-container {
   background-color: #ffebed;
   padding: 20px;
+   min-height: 100vh;
 }
 
 .section {
