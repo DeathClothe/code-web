@@ -20,7 +20,13 @@
     <!-- Buscar y Perfil -->
     <div class="toolbar-right">
       <div class="search-container">
-        <input type="text" placeholder="Buscar..." v-model="searchQuery" />
+        <input
+            type="text"
+            placeholder="Buscar..."
+            v-model="searchQuery"
+            @keyup.enter="searchItems"
+        />
+
         <img src="/public/chat_bubble.png" alt="Chat" class="icon" @click="navigateTo('/chat')" />
         <img src="/public/User_cicrle_light.png" alt="User" class="icon" @click="navigateTo('/profile')" />
       </div>
@@ -40,6 +46,7 @@ export default {
     ...mapState(useProfileStore, ["isAuthenticated"]),
   },
   methods: {
+
     navigateTo(route) {
       if (this.isAuthenticated) {
         this.$router.push(route);
@@ -50,8 +57,12 @@ export default {
       }
     },
     searchItems() {
-      console.log("Buscar:", this.searchQuery);
+      if (this.searchQuery.trim()) {
+        this.$router.push({ name: 'search', query: { q: this.searchQuery } });
+        this.searchQuery = '';
+      }
     }
+
   }
 };
 </script>

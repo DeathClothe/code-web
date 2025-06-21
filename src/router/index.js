@@ -10,6 +10,8 @@ import LoginComponent from "@/public/components/login.component.vue";
 import { useProfileStore } from "@/users/services/profile.store.js";
 import ProfileManagementComponent from "@/users/pages/profile-management.component.vue";
 import ClotheDetailComponent from "@/sales/components/clothe-detail.component.vue";
+import PageNotFoundComponent from "@/public/components/page-not-found.component.vue";
+import SearchResults from "@/public/components/SearchResults.vue";
 
 const routes = [
     { path: '/', component: LoginComponent, meta: { guest: true } },
@@ -24,7 +26,17 @@ const routes = [
     },
     { path: '/categoria/:id', name: 'CategoryDetail', component: () => import('@/categories/components/CategoryDetail.vue'), meta: { requiresAuth: true } },
     {  path: '/clothing/:id', name: 'clothing-detail', component: ClotheDetailComponent,
-        meta: { requiresAuth: true }}
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/search',
+        name: 'search',
+        component: SearchResults,
+        meta: { requiresAuth: true }
+    },
+
+    {   path: '/:pathMatch(.*)*',       name: 'not-found',  component: PageNotFoundComponent,       meta: {title: 'Page not found'}},
+
 ];
 
 const router = createRouter({
@@ -35,8 +47,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const profileStore = useProfileStore();
 
-    const publicPages = ['/login', '/register', '/start', '/explore']; // rutas públicas
-    const authRequired = !publicPages.includes(to.path);
+    // Si la ruta no existe (matched está vacío), dejar pasar para que caiga en PageNotFound
+    if (to.matched.length === 0) {
+        return next();
+    }
+
+    const authRequired = to.meta.requiresAuth;
 
     if (authRequired && !profileStore.isAuthenticated) {
         return next('/login');
@@ -44,5 +60,6 @@ router.beforeEach((to, from, next) => {
 
     next();
 });
+
 
 export default router;
