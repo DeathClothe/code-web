@@ -49,7 +49,8 @@ import { mapState } from "pinia";
 export default {
   data() {
     return {
-      searchQuery: ''
+      searchQuery: '',
+      activeLang: 'ESP'
     };
   },
   computed: {

@@ -33,22 +33,26 @@
     </div>
 
     <div v-if="filteredClothes.length" class="results-grid">
-      <div v-for="clothe in filteredClothes" :key="clothe.id" class="clothe-card" @click="goToDetail(clothe)">
-        <img :src="clothe.imagen" :alt="clothe.nombre" class="clothe-img" />
-        <div class="info">
-          <h3>{{ clothe.nombre }}</h3>
-          <p>S/{{ clothe.precio }}</p>
-        </div>
-      </div>
+      <ClotheCardSale
+          v-for="clothe in filteredClothes"
+          :key="clothe.id"
+          :clothe="clothe"
+      />
     </div>
+
     <div v-else class="no-results">No se encontraron resultados.</div>
   </div>
 </template>
 
 <script>
 import { ClotheService } from "@/sales/services/clothe.service.js";
+import ClotheCardSale from "@/sales/components/clothe-card-sale.vue";
 
 export default {
+  components: {
+    ClotheCardSale
+  },
+
   data() {
     return {
       clothes: [],
@@ -88,7 +92,7 @@ export default {
 
 <style scoped>
 .search-results {
-  background: #fff;
+  background: #ffebed;
   padding: 2rem;
   min-height: 100vh;
   font-family: 'K2D', sans-serif;
