@@ -18,32 +18,7 @@ export class ClotheService extends BaseService {
             });
     }
 
-    getByUserId(userId) {
-        return httpInstance.get(`${this.resourceEndpoint}?usuario=${userId}`)
-            .then(r => r.data)
-            .catch(error => {
-                console.error(`Error fetching clothes for user ID ${userId}`, error);
-                return [];
-            });
-    }
 
-    getByEstado(estado) {
-        return httpInstance.get(`${this.resourceEndpoint}?estado=${estado}`)
-            .then(r => r.data)
-            .catch(error => {
-                console.error(`Error fetching clothes by estado`, error);
-                return [];
-            });
-    }
-
-    getByName(name) {
-        return httpInstance.get(`${this.resourceEndpoint}?nombre_like=${name}`)
-            .then(r => r.data)
-            .catch(error => {
-                console.error(`Error fetching clothes by name`, error);
-                return [];
-            });
-    }
 
     update(clothe) {
         return super.update(clothe.id, clothe);
