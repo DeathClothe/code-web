@@ -121,27 +121,16 @@ export default {
       const clotheService = new ClotheService();
       const profileService = new ProfileService();
 
-      // 1. Generar nuevo ID basado en los existentes
-      const usedIds = this.clothes.map(c => c.id).filter(id => id.startsWith("P"));
-      const nextIdNumber = usedIds
-          .map(id => parseInt(id.substring(1)))
-          .filter(n => !isNaN(n))
-          .sort((a, b) => b - a)[0] + 1 || 1;
-
-      const newId = `P${nextIdNumber.toString().padStart(3, '0')}`;
-
       const finalClothe = {
         ...newClothe,
-        id: newId,
         usuario: this.profile.id,
         categorias: [],
         apiId: "v1"
       };
 
-      // 2. Guardar prenda y actualizar perfil
-      clotheService.create(finalClothe).then(() => {
-        this.clothes.push(finalClothe);
-        this.profile.armario.push(finalClothe.id);
+      clotheService.create(finalClothe).then((created) => {
+        this.clothes.push(created); // usamos el objeto creado desde el backend
+        this.profile.armario.push(created.id); // usamos el id real asignado
 
         profileService.update(this.profile.id, this.profile).then(() => {
           this.showAddForm = false;
@@ -150,7 +139,8 @@ export default {
         alert("Error al agregar la prenda.");
         console.error(err);
       });
-    },
+    }
+    ,
 
     publishClothe(updated) {
       const clotheService = new ClotheService();
