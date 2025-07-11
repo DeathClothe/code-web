@@ -58,10 +58,8 @@
 
     <!-- Botón Agregar Prendas -->
     <button class="add-clothe-btn" @click="showAddForm = true">Agregar Prendas</button>
-
   </div>
 </template>
-
 <script>
 import ClotheCardWardrobe from "../components/clothe-card-wardrobe.vue";
 import EditClotheModal from "../components/clothe-edit-form.vue";
@@ -124,52 +122,69 @@ export default {
       const finalClothe = {
         ...newClothe,
         usuario: this.profile.id,
-        categorias: [],
         apiId: "v1"
       };
 
-      clotheService.create(finalClothe).then((created) => {
-        this.clothes.push(created); // usamos el objeto creado desde el backend
-        this.profile.armario.push(created.id); // usamos el id real asignado
-
-        profileService.update(this.profile.id, this.profile).then(() => {
-          this.showAddForm = false;
-        });
-      }).catch(err => {
-        alert("Error al agregar la prenda.");
-        console.error(err);
-      });
-    }
-    ,
-
-    publishClothe(updated) {
-      const clotheService = new ClotheService();
-      const profileService = new ProfileService();
-
-      // 1. Actualiza la prenda
-      clotheService.update(updated)
+      clotheService.create(finalClothe)
+          .then((created) => {
+            this.clothes.push(created);
+            if (!this.profile.armario.includes(created.id)) {
+              this.profile.armario.push(String(created.id));
+            }
+            return profileService.update(this.profile.id, this.profile);
+          })
           .then(() => {
-            // 2. Mueve del armario a publicados
-            const updatedArmario = this.profile.armario.filter(id => id !== updated.id);
-            const updatedPublicados = [...this.profile.publicados, updated.id];
-            const updatedProfile = {
-              ...this.profile,
-              armario: updatedArmario,
-              publicados: updatedPublicados
-            };
-
-            return profileService.update(this.profile.id, updatedProfile)
-                .then(() => {
-                  this.profile.armario = updatedArmario;
-                  this.profile.publicados = updatedPublicados;
-                  this.showSaleForm = false;
-                  this.saleClothe = null;
-                });
+            return profileService.getById(this.profile.id);
+          })
+          .then((freshProfile) => {
+            this.profile = freshProfile;
+            useProfileStore().setProfile(freshProfile);
+            this.showAddForm = false;
           })
           .catch(err => {
-            alert("No se pudo poner en venta.");
+            alert("Error al agregar la prenda.");
             console.error(err);
           });
+    },
+
+    // Corregir la función publishClothe para recargar los datos después de mover la prenda
+    async publishClothe(updatedClothe) {
+      try {
+        // Asegurarse de que el profile esté cargado correctamente
+        if (!this.profile) {
+          throw new Error('El perfil no está disponible.');
+        }
+
+        const profileService = new ProfileService();
+
+        // Mover ID de armario a publicados
+        this.profile.armario = this.profile.armario.filter(id => id !== updatedClothe.id);
+        if (!this.profile.publicados.includes(updatedClothe.id)) {
+          this.profile.publicados.push(updatedClothe.id);
+        }
+
+        // Actualizar perfil en el backend
+        await profileService.update(this.profile.id, this.profile);
+
+        // Recargar datos del perfil
+        await this.loadProfileData();
+        useProfileStore().setProfile(this.profile); // Actualizar en el store y localStorage
+
+        this.$toast.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Prenda puesta en venta',
+          life: 3000
+        });
+      } catch (error) {
+        console.error('Error al poner en venta la prenda:', error);
+        this.$toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo poner en venta',
+          life: 3000
+        });
+      }
     },
 
     openSaleForm(clothe) {
@@ -184,26 +199,30 @@ export default {
     scrollRight() {
       this.$refs.scrollable.scrollBy({ left: 300, behavior: "smooth" });
     },
+
     removeFromWardrobe(clothe) {
       const profileService = new ProfileService();
 
-      // Quitar el ID del armario
       const updatedArmario = this.profile.armario.filter(id => id !== clothe.id);
       const updatedProfile = {
         ...this.profile,
         armario: updatedArmario
       };
 
-      // Actualizar en el servidor
       profileService.update(this.profile.id, updatedProfile)
           .then(() => {
-            this.profile.armario = updatedArmario;
+            return profileService.getById(this.profile.id);
+          })
+          .then(freshProfile => {
+            this.profile = freshProfile;
+            useProfileStore().setProfile(freshProfile);
           })
           .catch(err => {
             alert("Error al eliminar del armario.");
             console.error(err);
           });
     },
+
     handleUpdate(updated) {
       const clotheService = new ClotheService();
 
@@ -219,8 +238,19 @@ export default {
             alert("No se pudo actualizar la prenda.");
             console.error(err);
           });
-    }
+    },
 
+    // Función para cargar los datos del perfil y prendas
+    async loadProfileData() {
+      try {
+        const profileService = new ProfileService();
+        const profile = await profileService.getById(this.profile.id);
+        this.profile = profile;
+        useProfileStore().setProfile(profile);
+      } catch (error) {
+        console.error("Error al cargar los datos del perfil", error);
+      }
+    }
   },
   created() {
     const clotheService = new ClotheService();
@@ -244,6 +274,9 @@ export default {
   }
 };
 </script>
+
+
+
 
 <style scoped>
 .wardrobe-wrapper {
