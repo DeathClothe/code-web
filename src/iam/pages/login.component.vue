@@ -8,8 +8,10 @@
         Más que un mercado digital, es un espacio comunitario donde el estilo evoluciona con propósito.
       </p>
       <div class="image-container">
-        <img src="/public/LOGO.png" alt="Bienvenido" />
-        <p class="highlight">Revoluciona tu estilo y cuida el planeta: compra, vende y descubre moda de segunda mano de forma fácil, rápida y segura.</p>
+        <img src="/LOGO.png" alt="Bienvenido" />
+        <p class="highlight">
+          Revoluciona tu estilo y cuida el planeta: compra, vende y descubre moda de segunda mano de forma fácil, rápida y segura.
+        </p>
       </div>
     </div>
 
@@ -47,14 +49,12 @@
   </div>
 </template>
 
-
-// src/components/login.component.vue
-
 <script>
-import { useProfileStore } from "@/users/services/profile.store.js";
-import { AuthService } from "@/users/services/auth.service.js";
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
+import { useAuthenticationStore } from "@/iam/services/authentication.store.js";
+import { SignInRequest } from "@/iam/model/sign-in.request.js";
+import { useProfileStore } from "@/users/services/profile.store.js";
 
 export default {
   data() {
@@ -62,46 +62,48 @@ export default {
       email: "",
       password: "",
       rememberMe: false,
-      loginError: ""
+      loginError: "",
+      isRegister: false
     };
   },
   setup() {
-    const toast = useToast();
     const router = useRouter();
+    const toast = useToast();
+    const authenticationStore = useAuthenticationStore();
     const profileStore = useProfileStore();
-    const authService = new AuthService();
-    return { toast, router, profileStore,authService  };
+
+    return { router, toast, authenticationStore, profileStore };
   },
   methods: {
     async login() {
       try {
-        const user = await this.authService.login(this.email, this.password);
-        this.profileStore.setProfile(user);
-        console.log("✅ Perfil guardado:", this.profileStore.profile);
+        const request = new SignInRequest(this.email, this.password);
 
+        // ✅ Esperamos el resultado del login
+        const signInResponse = await this.authenticationStore.signIn(request, this.router);
 
-
-        if (user) {
-          this.profileStore.setProfile(user);
-          console.log("✅ Perfil guardado:", this.profileStore.profile);
-          console.log("👀 ID guardado:", this.profileStore.profile?.id);
-
-          await this.$router.push("/start");
+        if (signInResponse?.id > 0) {
+          await this.profileStore.fetchProfileById(signInResponse.id); // ✅ usamos el id devuelto
         } else {
-          this.loginError = "Correo electrónico o contraseña incorrectos.";
+          throw new Error("Inicio de sesión fallido: ID no válido.");
         }
+
+
+
+        await this.router.push("/start");
+
       } catch (error) {
-        console.error("❌ Error en login:", error);
-        this.loginError = "Error al iniciar sesión.";
+        console.error(" Error al iniciar sesión:", error);
+        this.loginError = "Correo o contraseña incorrectos.";
       }
-    }
-  ,
+    },
     goToRegister() {
       this.router.push("/register");
     }
   }
 };
 </script>
+
 
 
 <style scoped>

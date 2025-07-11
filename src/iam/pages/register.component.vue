@@ -8,8 +8,10 @@
         Más que un mercado digital, es un espacio comunitario donde el estilo evoluciona con propósito.
       </p>
       <div class="image-container">
-        <img src="/public/LOGO.png" alt="DeathClothe" class="logo">
-        <p class="highlight">Revoluciona tu estilo y cuida el planeta: compra, vende y descubre moda de segunda mano de forma fácil, rápida y segura.</p>
+        <img src="/LOGO.png" alt="DeathClothe" class="logo">
+        <p class="highlight">
+          Revoluciona tu estilo y cuida el planeta: compra, vende y descubre moda de segunda mano de forma fácil, rápida y segura.
+        </p>
       </div>
     </div>
 
@@ -46,11 +48,10 @@
         </div>
 
         <div class="terms">
-          <input type="checkbox" id="terms" v-model="acceptTerms">
+          <input type="checkbox" id="terms" v-model="acceptTerms" />
           <label for="terms">Acepto los Términos de Servicio y la Política de Privacidad</label>
         </div>
 
-        <!-- Botón de Crear Cuenta -->
         <button @click="register" class="register-button">Crear Cuenta</button>
 
         <p class="login-prompt">
@@ -69,8 +70,9 @@
 </template>
 
 <script>
-import { AuthService } from "@/users/services/auth.service.js";
 import { useRouter } from "vue-router";
+import { useAuthenticationStore } from "@/iam/services/authentication.store.js";
+import { SignUpRequest } from "@/iam/model/sign-up.request.js";
 
 export default {
   data() {
@@ -88,22 +90,26 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const authService = new AuthService();
-    return { router, authService };
+    const authenticationStore = useAuthenticationStore();
+    return { router, authenticationStore };
   },
   methods: {
+
     async register() {
+
       if (!this.acceptTerms) {
         alert("Por favor acepta los términos de servicio");
         return;
       }
 
       try {
-        // Registra el usuario
-        await this.authService.register(this.user);
-        await this.router.push("/login");
+        const { nombre, apellidos, email, direccion, password, tipo } = this.user;
+        const signUpRequest = new SignUpRequest(nombre, apellidos, email, password, direccion, tipo);
+        console.log("➡️ Datos enviados:", signUpRequest);
+
+        await this.authenticationStore.signUp(signUpRequest, this.router);
       } catch (error) {
-        console.error(error);
+        console.error("❌ Error en registro:", error);
         alert("Error durante el registro. Por favor, intenta de nuevo.");
       }
     },

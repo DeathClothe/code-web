@@ -65,6 +65,8 @@
             </pv-dialog>
 
           </div>
+
+          <!-- Product Modal -->
           <div v-if="selectedProduct" class="product-modal">
             <button class="close-btn" @click="selectedProduct = null">×</button>
             <div class="product-details">
@@ -77,6 +79,7 @@
             </div>
           </div>
 
+          <!-- Para ti section -->
           <div v-if="favTab === 'parati'" class="favoritos-list">
             <h4 class="section-title">Artículos recomendados para ti</h4>
             <h4 class="subtext">Basada en tus gustos te sugerimos estas prendas:</h4>
@@ -231,7 +234,6 @@
       styleClass="logout-toast"
   />
 </template>
-
 <script>
 import { AuthService } from "@/users/services/auth.service.js";
 import { useProfileStore } from "@/users/services/profile.store.js";
@@ -251,21 +253,22 @@ export default {
     return {
       activeProfile: 'comprador',
       favTab: 'favoritos',
-      pendientes: [],
-      selectedProduct: null,
+      selectedCategory: '', // Añadido aquí
+      searchQuery: '', // Añadido aquí
+      categorias: [], // Añadido categorías
       favoritos: [],
+      pendientes: [],
       vendidas: [],
+      selectedProduct: null,
       showSoldModal: false,
       showPendingModal: false,
       visibleFavoritesList: false,
-      searchQuery: "",
       editModalVisible: false,
       clotheToEdit: null,
       sellModalVisible: false,
       editProfileVisible: false,
       clotheToSell: null,
       clothes: [],
-      selectedCategory: "",
       page: 0,
       pageSize: 6,
       pageSold: 0,
@@ -327,68 +330,38 @@ export default {
         return matchesQuery && matchesCategory;
       });
     },
-
   },
   setup() {
     const profileStore = useProfileStore();
     const profileService = new ProfileService();
     const clotheService = new ClotheService();
 
-    // añade una instancia del AuthService
-    const authService    = new AuthService();
+    const authService = new AuthService();
 
     return { profileStore, profileService, clotheService, authService };
   },
   async created() {
     this.profileStore.initialize();
     await this.loadProfileData();
-
-
   },
 
   methods: {
     async loadProfileData() {
-      console.log("🧠 Perfil en el store al cargar:", this.profileStore.profile);
-      console.log("🆔 ID en el perfil:", this.profileStore.profile?.id);
       try {
         const profile = this.profileStore.profile;
-
         if (!profile) return;
 
         const favoritosIds = profile.favoritos || [];
         const publicadosIds = profile.publicados || [];
         const vendidosIds = profile.vendidos || [];
 
-
-        // DEBUG: Mostrar todos los IDs por separado
-        console.log("Favoritos IDs:", favoritosIds);
-        console.log("Publicados IDs:", publicadosIds);
-        console.log("Vendidos IDs:", vendidosIds);
-
-        // DEBUG: Ver qué IDs se están intentando buscar
-        const favoritosPromises = favoritosIds.map(async id => {
-          console.log("Buscando favorito:", id);
-          const clothe = await this.clotheService.getById(id);
-          console.log("Resultado favorito:", clothe);
-          return clothe;
-        });
+        const favoritosPromises = favoritosIds.map(async id => await this.clotheService.getById(id));
         this.favoritos = (await Promise.all(favoritosPromises)).filter(p => p);
 
-        const publicadosPromises = publicadosIds.map(async id => {
-          console.log("Buscando publicado:", id);
-          const clothe = await this.clotheService.getById(id);
-          console.log("Resultado publicado:", clothe);
-          return clothe;
-        });
+        const publicadosPromises = publicadosIds.map(async id => await this.clotheService.getById(id));
         this.pendientes = (await Promise.all(publicadosPromises)).filter(p => p);
-        console.log("Pendientes cargados:", this.pendientes);
 
-        const vendidosPromises = vendidosIds.map(async id => {
-          console.log("Buscando vendido:", id);
-          const clothe = await this.clotheService.getById(id);
-          console.log("Resultado vendido:", clothe);
-          return clothe;
-        });
+        const vendidosPromises = vendidosIds.map(async id => await this.clotheService.getById(id));
         this.vendidas = (await Promise.all(vendidosPromises)).filter(p => p);
 
         this.clothes = await this.clotheService.getAll();
@@ -402,30 +375,43 @@ export default {
         console.error("Producto inválido:", product);
         return;
       }
-      this.$router.push({name: 'ProductDetail', params: {productId: product.id}});
+      this.$router.push({ name: 'ProductDetail', params: { productId: product.id } });
     },
+
     showProductDetail(item) {
-      console.log("Producto seleccionado:", item);
       this.selectedProduct = item;
     },
+
     showFavoritesDialog() {
       this.visibleFavoritesList = true;
     },
+
     openEditClotheModal(clothe) {
-      this.clotheToEdit = {...clothe};
+      this.clotheToEdit = { ...clothe };
       this.editModalVisible = true;
     },
+
     closeEditClotheModal() {
       this.editModalVisible = false;
       this.clotheToEdit = null;
     },
-    goToExplore() {
-      this.$router.push({path: '/explore'});
+
+    openSellClotheModal(clothe) {
+      this.clotheToSell = { ...clothe };
+      this.sellModalVisible = true;
     },
+
+    closeSellClotheModal() {
+      this.sellModalVisible = false;
+      this.clotheToSell = null;
+    },
+
     async onSaveClothe(editedClothe) {
       try {
         await this.clotheService.update(editedClothe.id, editedClothe);
         this.clothes = await this.clotheService.getAll();
+        await this.loadProfileData();
+        useProfileStore().setProfile(this.profile); // Asegura que el store y localStorage estén actualizados
         this.closeEditClotheModal();
         this.$toast.add({
           severity: 'success',
@@ -434,7 +420,6 @@ export default {
           life: 3000
         });
       } catch (error) {
-        console.error('Error al actualizar la prenda:', error);
         this.$toast.add({
           severity: 'error',
           summary: 'Error',
@@ -443,12 +428,13 @@ export default {
         });
       }
     },
+
     async onRemoveClothe(editedClothe) {
       try {
         const userId = this.profileStore.profile?.id;
         if (!userId) return;
-        const fullProfile = await this.profileService.getById(userId);
 
+        const fullProfile = await this.profileService.getById(userId);
         fullProfile.publicados = (fullProfile.publicados || []).filter(id => id !== editedClothe.id);
         if (!fullProfile.armario.includes(editedClothe.id)) {
           fullProfile.armario.push(editedClothe.id);
@@ -456,6 +442,7 @@ export default {
 
         await this.profileService.update(userId, fullProfile);
         await this.loadProfileData();
+        useProfileStore().setProfile(this.profile); // Actualiza el perfil en el store y localStorage
         this.closeEditClotheModal();
         this.$toast.add({
           severity: 'success',
@@ -464,7 +451,6 @@ export default {
           life: 3000
         });
       } catch (error) {
-        console.error('Error al mover la prenda al armario:', error);
         this.$toast.add({
           severity: 'error',
           summary: 'Error',
@@ -473,39 +459,65 @@ export default {
         });
       }
     },
-    onEditPendingClothe(item) {
-      this.clotheToEdit = {...item};
-      this.editModalVisible = true;
-      this.showPendingModal = true;
-    },
-    openSellClotheModal(clothe) {
-      this.clotheToSell = {...clothe};
-      this.sellModalVisible = true;
-    },
-    closeSellClotheModal() {
-      this.sellModalVisible = false;
-      this.clotheToSell = null;
-    },
-    closeFavoritesModal() {
-      this.visibleFavoritesList = false;
-    },
 
-    async onConfirmSell({comprador, clothe}) {
+    async onConfirmSell({ correoComprador, clothe }) {
       try {
+
+        const correoCompradorLimpio = correoComprador?.toLowerCase().trim();
+
+        if (!correoCompradorLimpio || typeof correoCompradorLimpio !== 'string') {
+          throw new Error('El correo del comprador no es válido');
+        }
+
         const vendedorId = this.profileStore.profile?.id;
+        if (!vendedorId) {
+          throw new Error('No se pudo obtener el perfil del vendedor');
+        }
+
         const vendedorProfile = await this.profileService.getById(vendedorId);
+
+        // Eliminar la prenda de los "publicados" y agregarla a "vendidos"
         vendedorProfile.publicados = (vendedorProfile.publicados || []).filter(id => id !== clothe.id);
         if (!vendedorProfile.vendidos.includes(clothe.id)) {
-          vendedorProfile.vendidos.push(clothe.id);
+          vendedorProfile.vendidos.push(clothe.id); // Mover la prenda a vendidos
         }
+
+        // Actualizar el perfil del vendedor
         await this.profileService.update(vendedorId, vendedorProfile);
 
-        if (!comprador.armario.includes(clothe.id)) {
-          comprador.armario.push(clothe.id);
-          await this.profileService.update(comprador.id, comprador);
+        const allProfiles = await this.profileService.getAll();
+        console.log("Perfiles obtenidos: ", allProfiles);
+
+        const profiles = Array.isArray(allProfiles) ? allProfiles : allProfiles?.data || [];
+        if (!Array.isArray(profiles)) {
+          throw new Error('La respuesta de getAll no es un arreglo');
+        }
+
+        const compradorProfile = profiles.find(profile => {
+          const correoProfile = profile.email?.toLowerCase().trim(); // Limpiamos también el correo del perfil
+          console.log("Correo del perfil comparado:", correoProfile); // Log para ver el correo comparado
+          console.log("Correo del comprador para comparar:", correoCompradorLimpio); // Log para ver qué estamos comparando
+
+          return correoProfile === correoCompradorLimpio; // Comparamos los correos limpios
+        });
+
+        console.log("Comprador encontrado:", compradorProfile); // Verifica si encontramos al comprador correctamente
+
+        if (!compradorProfile) {
+          throw new Error('Comprador no encontrado con ese correo electrónico');
+        }
+
+        // Mover la prenda al armario del comprador
+        if (!compradorProfile.armario.includes(clothe.id)) {
+          compradorProfile.armario.push(clothe.id); // Agregar la prenda al armario del comprador
+          await this.profileService.update(compradorProfile.id, compradorProfile); // Actualizar el perfil del comprador
         }
 
         await this.loadProfileData();
+
+        useProfileStore().setProfile(this.profile);
+        this.$forceUpdate();
+        // Cerrar los modales y mostrar el mensaje de éxito
         this.closeSellClotheModal();
         this.closeEditClotheModal();
         this.$toast.add({
@@ -515,25 +527,29 @@ export default {
           life: 3000
         });
       } catch (error) {
+        console.error("Error en la venta:", error);
         this.$toast.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'No se pudo realizar la venta',
+          detail: error.message || 'No se pudo realizar la venta',
           life: 3000
         });
       }
-    },
+    }
+
+
+    ,
+
     async onSaveProfile(editedProfile) {
       try {
         const userId = this.profileStore.profile?.id;
         if (!userId) return;
+
         const updatedProfile = { ...this.profileStore.profile, ...editedProfile };
         await this.profileService.update(userId, updatedProfile);
 
-        // Obtén el perfil actualizado del backend
         const freshProfile = await this.profileService.getById(userId);
-        this.profileStore.setProfile(freshProfile); // Actualiza el store y el localStorage
-
+        useProfileStore().setProfile(freshProfile); // Actualiza el store y localStorage
         await this.loadProfileData();
         this.editProfileVisible = false;
         this.$toast.add({
@@ -551,30 +567,28 @@ export default {
         });
       }
     },
+
     handleLogout() {
-      // Limpia datos de autenticación
       this.authService.logout();
       this.profileStore.clearProfile();
 
-      // Muestra el pop-up de confirmación
       this.$toast.add({
-        group   : 'logout',
+        group: 'logout',
         severity: 'success',
-        summary : 'Éxito',
-        detail  : 'Sesión cerrada correctamente',
-        life    : 3000 // Visible por 3s
+        summary: 'Éxito',
+        detail: 'Sesión cerrada correctamente',
+        life: 3000
       });
 
-      // Espera un segundo y luego redirige al login
       setTimeout(() => {
         this.$router.push('/login');
-      }, 1000); // 1s de espera
-    },
-
+      }, 1000);
+    }
   }
-}
-
+};
 </script>
+
+
 
 
 <style scoped>
@@ -624,11 +638,7 @@ export default {
   text-align: center;
 }
 
-.favorite-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
+
 
 .favorite-price,
 .favorite-category {

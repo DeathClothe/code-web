@@ -6,13 +6,17 @@ export class BaseService {
     }
 
     getAll() {
-        return httpInstance.get(this.resourceEndpoint)
-            .then(r => r.data)
+        return httpInstance.get(this.resourceEndpoint) // Realiza la solicitud GET
+            .then(r => {
+                console.log('Respuesta de la API', r.data); // Aquí podemos ver los datos de la respuesta
+                return r.data; // Devuelve los datos
+            })
             .catch(error => {
                 console.error(`Error fetching all from ${this.resourceEndpoint}`, error);
-                return [];
+                return []; // En caso de error, devuelve un array vacío
             });
     }
+
 
     getById(id) {
         return httpInstance.get(`${this.resourceEndpoint}?id=${id}`)
@@ -24,6 +28,7 @@ export class BaseService {
     }
 
     create(resource) {
+        console.log("📦 Payload enviado a API:", JSON.stringify(resource));
         return httpInstance.post(this.resourceEndpoint, resource)
             .then(r => r.data)
             .catch(error => {

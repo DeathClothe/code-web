@@ -33,3 +33,4 @@ getById(id) {
     }
 
 }
+export const profileService = new ProfileService();

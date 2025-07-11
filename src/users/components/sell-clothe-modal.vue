@@ -20,22 +20,32 @@ export default {
       this.error = "";
       this.loading = true;
       try {
-        const profiles = await this.profileService.getByEmail(this.email);
-        if (!profiles || profiles.length === 0) {
+        // Obtener todos los perfiles de usuario
+        const profiles = await this.profileService.getAll();
+
+        // Filtrar el comprador por correo electrónico
+        const comprador = profiles.find(profile => profile.email.toLowerCase() === this.email.toLowerCase());
+
+        // Si no se encuentra el comprador
+        if (!comprador) {
           this.error = "Correo no encontrado. Ingresa un correo válido.";
           this.loading = false;
           return;
         }
-        this.$emit("confirm", { comprador: profiles[0], clothe: this.clothe });
+
+        // Ahora pasamos el correo del comprador a la función onConfirmSell
+        console.log("Correo recibido para comprador:", this.email); // Verificar si el correo es correcto
+        this.$emit("confirm", { correoComprador: this.email, clothe: this.clothe });
       } catch (e) {
         this.error = "Error al buscar el correo.";
+        console.error(e);
       }
       this.loading = false;
-    },
-    close() {
+    },close() {
       this.$emit("close");
     }
   }
+
 };
 </script>
 
@@ -46,7 +56,7 @@ export default {
       <div class="modal-title">Vender Prenda</div>
       <div class="form-group">
         <label>Correo del comprador:</label>
-        <input v-model="email" type="email" placeholder="correo@ejemplo.com" />
+        <input v-model="email" type="email" placeholder="correo@ejemplo.com"/>
         <div v-if="error" class="error">{{ error }}</div>
       </div>
       <button class="confirm-btn" @click="confirm" :disabled="loading">
@@ -59,8 +69,11 @@ export default {
 <style scoped>
 .modal-backdrop {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,7 +87,7 @@ export default {
   min-width: 400px;
   min-height: 200px;
   position: relative;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
   display: flex;
   flex-direction: column;
   align-items: stretch;

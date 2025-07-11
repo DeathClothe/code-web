@@ -90,11 +90,15 @@ export default {
       return e;
     },
     submitClothe() {
+      console.log("🧪 Categorías seleccionadas:", this.newClothe.categorias);
+
       this.errors = this.validateForm();
       if (Object.keys(this.errors).length > 0) return;
 
+      console.log("💡 Prenda enviada:", this.newClothe);
       this.$emit('create', { ...this.newClothe });
     }
+
   }
 };
 </script>
