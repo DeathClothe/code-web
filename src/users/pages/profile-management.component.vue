@@ -235,7 +235,6 @@
   />
 </template>
 <script>
-import { AuthService } from "@/users/services/auth.service.js";
 import { useProfileStore } from "@/users/services/profile.store.js";
 import { ProfileService } from "@/users/services/profile.service.js";
 import { ClotheService } from "@/sales/services/clothe.service.js";
@@ -336,9 +335,8 @@ export default {
     const profileService = new ProfileService();
     const clotheService = new ClotheService();
 
-    const authService = new AuthService();
 
-    return { profileStore, profileService, clotheService, authService };
+    return { profileStore, profileService, clotheService };
   },
   async created() {
     this.profileStore.initialize();
@@ -569,7 +567,10 @@ export default {
     },
 
     handleLogout() {
-      this.authService.logout();
+
+      localStorage.removeItem('profile');
+
+      localStorage.removeItem('authToken');
       this.profileStore.clearProfile();
 
       this.$toast.add({
