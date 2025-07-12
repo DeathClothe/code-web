@@ -2,24 +2,24 @@
   <div class="profile-wrapper">
     <div class="profile-content">
       <div class="left-panel">
-        <h1>Perfil {{ activeProfile === 'comprador' ? 'Comprador' : 'Vendedor' }}</h1>
+        <h1>{{ $t('profile.title') }} {{ activeProfile === 'comprador' ? $t('profile.buyer') : $t('profile.seller') }}</h1>
 
         <div class="profile-tabs">
           <button
               :class="{ active: activeProfile === 'comprador' }"
               @click="activeProfile = 'comprador'"
-          >COMPRADOR</button>
+          >{{ $t('profile.button-buyer') }}</button>
           <button
               :class="{ active: activeProfile === 'vendedor' }"
               @click="activeProfile = 'vendedor'"
-          >VENDEDOR</button>
+          >{{ $t('profile.button-seller') }}</button>
         </div>
 
         <!-- SECCIÓN COMPRADOR -->
         <div v-if="activeProfile === 'comprador'" class="favoritos-section">
           <div class="tabs-fav-ti">
-            <button :class="{ active: favTab === 'favoritos' }" @click="favTab='favoritos'">Favoritos</button>
-            <button :class="{ active: favTab === 'parati' }" @click="favTab='parati'">Para ti</button>
+            <button :class="{ active: favTab === 'favoritos' }" @click="favTab='favoritos'">{{ $t('profile.favorites') }}</button>
+            <button :class="{ active: favTab === 'parati' }" @click="favTab='parati'">{{ $t('profile.foryou') }}</button>
           </div>
 
           <div v-if="favTab === 'favoritos'" class="favoritos-list">
@@ -27,7 +27,7 @@
               <img :src="clothes.imagen" alt="Prenda" />
               <div class="heart">♡</div>
             </div>
-            <button class="btn-ver-fav" @click="visibleFavoritesList = true">Ver catálogo de favoritos</button>
+            <button class="btn-ver-fav" @click="visibleFavoritesList = true">{{ $t('profile.show') }}</button>
 
             <pv-dialog v-model:visible="visibleFavoritesList" class="modal-backdrop" style="background-color: #ffffff; border-radius: 20px; padding: 40px;">
               <div class="modal-content">
@@ -81,13 +81,13 @@
 
           <!-- Para ti section -->
           <div v-if="favTab === 'parati'" class="favoritos-list">
-            <h4 class="section-title">Artículos recomendados para ti</h4>
-            <h4 class="subtext">Basada en tus gustos te sugerimos estas prendas:</h4>
+            <h4 class="section-title">{{ $t('profile.foryou-title') }}</h4>
+            <h4 class="subtext">{{ $t('profile.foryou-text') }}</h4>
             <div class="clothes-item" v-for="clothes in favoritos" :key="clothes.id" @click="goToProductDetail(clothes)">
               <img :src="clothes.imagen" alt="Prenda" />
               <div class="star">☆</div>
             </div>
-            <pv-button @click="goToExplore()">Ir a explorar</pv-button>
+            <pv-button @click="goToExplore()">{{ $t('profile.foryou-goto') }}</pv-button>
           </div>
         </div>
 
@@ -95,18 +95,18 @@
         <div v-if="activeProfile === 'vendedor'" class="vendedor-section">
           <!-- SECCIÓN VENDIDOS -->
           <div class="section-title-custom">
-            <h3>Vendidos:</h3>
+            <h3>{{ $t('profile.sold') }}</h3>
           </div>
           <div class="vendidas-grid">
             <div class="vendida-card" v-for="item in vendidas.slice(0, 6)" :key="item.id">
               <img :src="item.imagen" alt="Prenda vendida" style="width:80px; border-radius:15px; margin-bottom:5px;" />
-              <div>Tipo: {{ item.tipo }}</div>
-              <div>Estado: Vendido</div>
-              <div>Precio: {{ item.precio }}</div>
+              <div>{{ $t('profile.type') }} {{ item.tipo }}</div>
+              <div>{{ $t('profile.state-sold') }} </div>
+              <div>{{ $t('profile.price') }} {{ item.precio }}</div>
             </div>
           </div>
           <a class="label-lista" @click.prevent="showSoldModal = true">
-            Lista de prendas vendidas
+            {{ $t('profile.list-sold') }}
           </a>
           <SoldClothesModal
               v-if="showSoldModal"
@@ -116,19 +116,19 @@
 
           <!-- SECCIÓN PUBLICADOS -->
           <div class="section-title-custom">
-            <h3>Publicados:</h3>
+            <h3>{{ $t('profile.published') }}</h3>
           </div>
           <div class="pendientes-grid">
             <div class="pendiente-card" v-for="item in pendientes.slice(0, 6)" :key="item.id">
               <img :src="item.imagen" alt="Prenda pendiente" style="width:80px; border-radius:15px; margin-bottom:5px;" />
-              <div>Tipo: {{ item.tipo }}</div>
-              <div>Estado: Publicado</div>
-              <div>Precio: {{ item.precio }}</div>
+              <div>{{ $t('profile.type') }} {{ item.tipo }}</div>
+              <div>{{ $t('profile.state-published') }}</div>
+              <div>{{ $t('profile.price') }} {{ item.precio }}</div>
               <button class="editar-btn" @click="openEditClotheModal(item)">Editar</button>
             </div>
           </div>
           <a class="label-lista" @click.prevent="showPendingModal = true">
-            Lista de prendas publicadas
+            {{ $t('profile.list-published') }}
           </a>
           <PendingClothesModal
               v-if="showPendingModal"
@@ -156,27 +156,27 @@
           <!-- SECCIÓN ESTADÍSTICAS DE VENDEDOR -->
           <div class="estadisticas-section">
             <div class="section-title-custom">
-              <h3>Estadísticas de Ventas:</h3>
+              <h3>{{ $t('profile.statistics') }}</h3>
             </div>
             <div v-if="estadisticasVentas.total > 0" class="estadisticas-cards">
               <div class="estadistica-card">
                 <div class="icono-card">🛒</div>
                 <div class="dato-card">{{ estadisticasVentas.total }}</div>
-                <div class="label-card">Vendidas</div>
+                <div class="label-card">{{ $t('profile.stat-sold') }}</div>
               </div>
               <div class="estadistica-card">
                 <div class="icono-card">💰</div>
                 <div class="dato-card">S/. {{ estadisticasVentas.ingresos }}</div>
-                <div class="label-card">Ingresos</div>
+                <div class="label-card">{{ $t('profile.stat-earnings') }}</div>
               </div>
               <div class="estadistica-card">
                 <div class="icono-card">🏆</div>
                 <div class="dato-card">{{ estadisticasVentas.topCategoria }}</div>
-                <div class="label-card">Top Categoría</div>
+                <div class="label-card">{{ $t('profile.stat-top') }}</div>
               </div>
             </div>
             <div v-if="estadisticasVentas.total > 0" class="estadisticas-categorias">
-              <span class="label-categorias">Ventas por categoría:</span>
+              <span class="label-categorias">{{ $t('profile.stat-category') }}</span>
               <div class="categorias-badges">
                 <span
                     v-for="(cantidad, categoria) in estadisticasVentas.porCategoria"
@@ -188,7 +188,7 @@
               </div>
             </div>
             <div v-else class="estadisticas-empty">
-              <span>Sin ventas registradas aún.</span>
+              <span>{{ $t('profile.no-stat') }}</span>
             </div>
           </div>
 
@@ -199,22 +199,22 @@
       <div class="right-panel">
         <div v-if="profile" class="profile-image-wrapper">
           <div class="edit-profile-btn-wrapper">
-            <button class="edit-profile-btn" @click="editProfileVisible = true">Editar perfil</button>
+            <button class="edit-profile-btn" @click="editProfileVisible = true">{{ $t('profile.edit') }}</button>
           </div>
           <img :src="profile.imageprofile" alt="Perfil Usuario" class="profile-img" />
           <div class="profile-data">
-            <p><strong>Nombre:</strong> {{ profile.nombre }}</p>
-            <p><strong>Apellidos:</strong> {{ profile.apellidos }}</p>
-            <p><strong>Correo:</strong> {{ profile.email }}</p>
-            <p><strong>Dirección:</strong> {{ profile.direccion }}</p>
-            <p><strong>Tipo:</strong> {{ profile.tipo }}</p>
+            <p><strong>{{ $t('profile.name') }}</strong> {{ profile.nombre }}</p>
+            <p><strong>{{ $t('profile.lastnames') }}</strong> {{ profile.apellidos }}</p>
+            <p><strong>{{ $t('profile.email') }}</strong> {{ profile.email }}</p>
+            <p><strong>{{ $t('profile.address') }}</strong> {{ profile.direccion }}</p>
+            <p><strong>{{ $t('profile.type') }}</strong> {{ profile.tipo }}</p>
           </div>
           <div class="logout-btn-wrapper">
-            <button class="logout-button" @click="handleLogout">Cerrar sesión</button>
+            <button class="logout-button" @click="handleLogout">{{ $t('profile.logout') }}</button>
           </div>
         </div>
         <div v-else class="profile-image-wrapper">
-          <p>No hay datos de perfil disponibles.</p>
+          <p>{{ $t('profile.nodata') }}</p>
         </div>
         <EditProfileModal
             v-if="editProfileVisible"

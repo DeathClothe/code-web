@@ -16,8 +16,10 @@ import Toast from 'primevue/toast';
 
 import 'primeicons/primeicons.css';
 import Dialog from "primevue/dialog";
+import i18n from "@/i18n.js";
 
 const app = createApp(App);
+app.use(i18n);
 const pinia = createPinia();
 
 app.use(pinia);

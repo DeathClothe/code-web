@@ -1,45 +1,43 @@
 <template>
   <div class="login-container">
     <div class="welcome-section">
-      <h1>BIENVENIDO A DEATH CLOTHE</h1>
+      <h1>{{ $t('login.title') }}</h1>
       <p>
-        DeathClothe es una plataforma de moda circular que ofrece compra, venta y descubrimiento de ropa de segunda mano con recomendaciones personalizadas basadas en tu armario virtual.
-        Su experiencia intuitiva conecta a usuarios interesados en autenticidad, estilo y sostenibilidad, dando nueva vida a prendas únicas.
-        Más que un mercado digital, es un espacio comunitario donde el estilo evoluciona con propósito.
+        {{ $t('login.description') }}
       </p>
       <div class="image-container">
         <img src="/LOGO.png" alt="Bienvenido" />
         <p class="highlight">
-          Revoluciona tu estilo y cuida el planeta: compra, vende y descubre moda de segunda mano de forma fácil, rápida y segura.
+          {{ $t('login.highlight') }}
         </p>
       </div>
     </div>
 
     <div class="form-section">
       <div class="tab-buttons">
-        <button :class="{ active: !isRegister }" @click="isRegister = false">Iniciar Sesión</button>
-        <button :class="{ active: isRegister }" @click="goToRegister">Registrarse</button>
+        <button :class="{ active: !isRegister }" @click="isRegister = false">{{ $t('login.login') }}</button>
+        <button :class="{ active: isRegister }" @click="goToRegister">{{ $t('login.register') }}</button>
       </div>
 
       <div class="login-form">
         <div class="field">
-          <label for="email">Correo electrónico</label>
-          <input type="email" id="email" v-model="email" placeholder="ejemplo@email.com" />
+          <label for="email">{{ $t('login.email') }}</label>
+          <input type="email" id="email" v-model="email" placeholder="email@hotmail.com" />
         </div>
         <div class="field">
-          <label for="password">Contraseña</label>
+          <label for="password">{{ $t('login.password') }}</label>
           <input type="password" id="password" v-model="password" placeholder="********" />
-          <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+          <a href="#" class="forgot-password">{{ $t('login.forgot') }}</a>
         </div>
         <div class="checkbox">
           <input type="checkbox" id="remember" v-model="rememberMe" />
-          <label for="remember">Recuérdame</label>
+          <label for="remember">{{ $t('login.remember') }}</label>
         </div>
-        <button class="login-button" @click="login">Iniciar Sesión</button>
+        <button class="login-button" @click="login">{{ $t('login.login') }}</button>
         <p v-if="loginError" class="error">{{ loginError }}</p>
 
         <div class="social-login">
-          <p>O continua con</p>
+          <p>{{ $t('login.continue') }}</p>
           <button class="social-btn facebook">Facebook</button>
           <button class="social-btn google">Google</button>
           <button class="social-btn email">Email</button>
@@ -83,6 +81,8 @@ export default {
         const signInResponse = await this.authenticationStore.signIn(request, this.router);
 
         if (signInResponse?.id > 0) {
+          localStorage.setItem('authToken', signInResponse.token)
+
           await this.profileStore.fetchProfileById(signInResponse.id); // ✅ usamos el id devuelto
         } else {
           throw new Error("Inicio de sesión fallido: ID no válido.");

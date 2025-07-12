@@ -4,6 +4,7 @@
  */
 
 import axios from "axios";
+import {authenticationInterceptor} from "@/iam/services/authentication.interceptor.js";
 
 /**
  * Configured axios instance for making HTTP requests
@@ -21,5 +22,7 @@ const httpInstance = axios.create({
         'Access-Control-Allow-Origin': '*'
     }
 });
+
+httpInstance.interceptors.request.use(authenticationInterceptor);
 
 export default httpInstance;

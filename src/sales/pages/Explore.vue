@@ -1,10 +1,10 @@
 <template>
   <div class="explore-container">
-    <h2>Explorar Prendas</h2>
+    <h2>{{ $t('explore.title') }}</h2>
 
     <!-- ✅ Carrusel de Categorías -->
     <div class="section">
-      <h3>Categorías</h3>
+      <h3>{{ $t('explore.categories') }}</h3>
       <div class="categories-carousel">
         <button class="carousel-arrow left" @click="scrollLeft('categories')">
           <img src="/public/FLECHAIZQUIERDA.png" alt="left arrow" />
@@ -22,7 +22,7 @@
 
     <!-- ✅ Carrusel de Ofertas -->
     <div class="section">
-      <h3>Ofertas</h3>
+      <h3>{{ $t('explore.sales') }}</h3>
       <div class="offers-carousel">
         <button class="carousel-arrow left" @click="scrollLeft('offers')">
           <img src="/public/FLECHAIZQUIERDA.png" alt="left arrow" />

@@ -1,0 +1,80 @@
+{
+  "toolbar": {
+    "home": "Inicio",
+    "explore": "Explorar",
+    "wardrobe": "Armario",
+    "favorites": "Favoritos",
+    "search": "Buscar..."
+  },
+  "login": {
+    "title": "BIENVENIDO A DEATH CLOTHE",
+    "description": "DeathClothe es una plataforma de moda circular que ofrece compra, venta y descubrimiento de ropa de segunda mano con recomendaciones personalizadas basadas en tu armario virtual.\n        Su experiencia intuitiva conecta a usuarios interesados en autenticidad, estilo y sostenibilidad, dando nueva vida a prendas únicas.\n        Más que un mercado digital, es un espacio comunitario donde el estilo evoluciona con propósito.",
+    "highlight": "Revoluciona tu estilo y cuida el planeta: compra, vende y descubre moda de segunda mano de forma fácil, rápida y segura.",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "forgot": "¿Olvidaste tu contraseña?",
+    "remember": "Recuérdame",
+    "continue": "O continua con",
+    "name": "Nombre",
+    "lastnames": "Apellidos",
+    "address": "Dirección",
+    "terms": "Acepto los Términos de Servicio y Política de Privacidad",
+    "create": "Crear Cuenta",
+    "already": "¿Ya tienes una cuenta?"
+  },
+  "home": {
+    "news": "Novedades",
+    "sales": "Ofertas"
+  },
+  "explore": {
+    "title": "Explorar Prendas",
+    "categories": "Categorías",
+    "sales": "Ofertas"
+  },
+  "wardrobe": {
+    "title": "Armario Virtual",
+    "button": "Agregar Prendas"
+  },
+  "favorites": {
+    "title": "Basados en tus favoritos:",
+    "other": "Otras recomendaciones:",
+    "empty": "No hay recomendaciones por ahora."
+  },
+  "profile": {
+    "title": "Perfil",
+    "buyer": "Comprador",
+    "seller": "Vendedor",
+    "button-buyer": "COMPRADOR",
+    "button-seller": "VENDEDOR",
+    "favorites": "Favoritos",
+    "foryou": "Para ti",
+    "show": "Ver catálogo de favoritos",
+    "foryou-title": "Artículos recomendados para ti",
+    "foryou-text": "Basada en tus gustos te sugerimos estas prendas:",
+    "foryou-goto": "Ir a Explorar",
+    "edit": "Editar Perfil",
+    "name": "Nombre:",
+    "lastnames": "Apellidos:",
+    "email": "Correo:",
+    "address": "Dirección:",
+    "type": "Tipo:",
+    "logout": "Cerrar Sesión",
+    "nodata": "No hay datos de perfil disponibles.",
+    "sold": "Vendidos:",
+    "state-sold": "Estado: Vendido",
+    "state-published": "Estado: Publicado",
+    "price": "Precio:",
+    "list-sold": "Lista de prendas vendidas",
+    "published": "Publicados:",
+    "edit-clothe": "Editar",
+    "list-published": "Lista de prendas publicadas",
+    "statistics": "Estadísticas de Ventas:",
+    "stat-sold": "Vendidas",
+    "stat-earnings": "Ingresos",
+    "stat-top": "Top Categoría",
+    "stat-category": "Ventas por categoría:",
+    "no-stat": "Sin ventas registradas aún."
+  }
+}

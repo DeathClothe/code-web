@@ -1,6 +1,6 @@
 <template>
   <div class="wardrobe-wrapper">
-    <h1 class="page-title">ARMARIO VIRTUAL</h1>
+    <h1 class="page-title">{{ $t('wardrobe.title') }}</h1>
 
     <div class="wardrobe-container">
       <div class="filters">
@@ -57,7 +57,7 @@
     />
 
     <!-- Botón Agregar Prendas -->
-    <button class="add-clothe-btn" @click="showAddForm = true">Agregar Prendas</button>
+    <button class="add-clothe-btn" @click="showAddForm = true">{{ $t('wardrobe.button') }}</button>
   </div>
 </template>
 <script>

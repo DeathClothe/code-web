@@ -1,0 +1,80 @@
+{
+  "toolbar": {
+    "home": "Home",
+    "explore": "Explore",
+    "wardrobe": "Wardrobe",
+    "favorites": "Favorites",
+    "search": "Search..."
+  },
+  "login": {
+    "title": "WELCOME TO DEATH CLOTHE",
+    "description": "DeathClothe is a circular fashion platform that offers buying, selling, and discovering second-hand clothing with personalized recommendations based on your virtual wardrobe.\n        Its intuitive experience connects users interested in authenticity, style, and sustainability, giving new life to unique garments.\n        More than a digital marketplace, it is a community space where style evolves with purpose.",
+    "highlight": "Revolutionize your style and care for the planet: buy, sell, and discover second-hand fashion easily, quickly, and securely.",
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "forgot": "Forgot your password?",
+    "remember": "Remember me",
+    "continue": "Or continue with",
+    "name": "Name",
+    "lastnames": "Last Names",
+    "address": "Address",
+    "terms": "I accept the Terms of Service and Privacy Policy",
+    "create": "Create Account",
+    "already": "Already have an account?"
+  },
+  "home": {
+    "news": "News",
+    "sales": "Sales"
+  },
+  "explore": {
+    "title": "Explore Clothes",
+    "categories": "Categories",
+    "sales": "Sales"
+  },
+  "wardrobe": {
+    "title": "Virtual Wardrobe",
+    "button": "Add Clothes"
+  },
+  "favorites": {
+    "title": "Based on your favorites:",
+    "other": "Other recommendations:",
+    "empty": "No recommendations available at the moment."
+  },
+  "profile": {
+    "title": "Profile",
+    "buyer": "Buyer",
+    "seller": "Seller",
+    "button-buyer": "BUYER",
+    "button-seller": "SELLER",
+    "favorites": "Favorites",
+    "foryou": "For you",
+    "show": "View favorites catalog",
+    "foryou-title": "Items recommended for you",
+    "foryou-text": "Based on your preferences, we suggest these clothes:",
+    "foryou-goto": "Go to Explore",
+    "edit": "Edit Profile",
+    "name": "Name:",
+    "lastnames": "Last Names:",
+    "email": "Email:",
+    "address": "Address:",
+    "type": "Type:",
+    "logout": "Logout",
+    "nodata": "No data available",
+    "sold": "Sold:",
+    "state-sold": "State: Sold",
+    "state-published": "State: Published",
+    "price": "Price:",
+    "list-sold": "List of sold clothes",
+    "published": "Published:",
+    "edit-clothe": "Edit",
+    "list-published": "List of published clothes",
+    "statistics": "Sales Statistics:",
+    "stat-sold": "Sold",
+    "stat-earnings": "Earnings",
+    "stat-top": "Top Category",
+    "stat-category": "Sales by Category:",
+    "no-stat": "No sales recorded yet."
+  }
+}

@@ -1,66 +1,64 @@
 <template>
   <div class="login-container">
     <div class="welcome-section">
-      <h1>BIENVENIDO A DEATH CLOTHE</h1>
+      <h1>{{ $t('login.title') }}</h1>
       <p>
-        DeathClothe es una plataforma de moda circular que ofrece compra, venta y descubrimiento de ropa de segunda mano con recomendaciones personalizadas basadas en tu armario virtual.
-        Su experiencia intuitiva conecta a usuarios interesados en autenticidad, estilo y sostenibilidad, dando nueva vida a prendas únicas.
-        Más que un mercado digital, es un espacio comunitario donde el estilo evoluciona con propósito.
+        {{ $t('login.description') }}
       </p>
       <div class="image-container">
         <img src="/LOGO.png" alt="DeathClothe" class="logo">
         <p class="highlight">
-          Revoluciona tu estilo y cuida el planeta: compra, vende y descubre moda de segunda mano de forma fácil, rápida y segura.
+          {{ $t('login.highlight') }}
         </p>
       </div>
     </div>
 
     <div class="form-section">
       <div class="tab-buttons">
-        <button :class="{ active: false }" @click="goToLogin">Iniciar Sesión</button>
-        <button class="active">Registrarse</button>
+        <button :class="{ active: false }" @click="goToLogin">{{ $t('login.login') }}</button>
+        <button class="active">{{ $t('login.register') }}</button>
       </div>
 
       <div class="register-form">
         <div class="field">
-          <label for="nombre">Nombre</label>
+          <label for="nombre">{{ $t('login.name') }}</label>
           <input id="nombre" v-model="user.nombre" type="text" />
         </div>
 
         <div class="field">
-          <label for="apellidos">Apellidos</label>
+          <label for="apellidos">{{ $t('login.lastnames') }}</label>
           <input id="apellidos" v-model="user.apellidos" type="text" />
         </div>
 
         <div class="field">
-          <label for="email">Correo Electrónico</label>
+          <label for="email">{{ $t('login.email') }}</label>
           <input id="email" v-model="user.email" type="email" />
         </div>
 
         <div class="field">
-          <label for="direccion">Dirección</label>
+          <label for="direccion">{{ $t('login.address') }}</label>
           <input id="direccion" v-model="user.direccion" type="text" />
         </div>
 
         <div class="field">
-          <label for="password">Contraseña</label>
+          <label for="password">{{ $t('login.password') }}</label>
           <input id="password" v-model="user.password" type="password" />
         </div>
 
         <div class="terms">
           <input type="checkbox" id="terms" v-model="acceptTerms" />
-          <label for="terms">Acepto los Términos de Servicio y la Política de Privacidad</label>
+          <label for="terms">{{ $t('login.terms') }}</label>
         </div>
 
-        <button @click="register" class="register-button">Crear Cuenta</button>
+        <button @click="register" class="register-button">{{ $t('login.create') }}</button>
 
         <p class="login-prompt">
-          ¿Ya tienes una cuenta? <a href="#" @click.prevent="goToLogin">Iniciar Sesión</a>
+          {{ $t('login.already') }} <a href="#" @click.prevent="goToLogin">{{ $t('login.login') }}</a>
         </p>
       </div>
 
       <div class="social-login">
-        <p>O continúa con</p>
+        <p>{{ $t('login.continue') }}</p>
         <button class="social-btn facebook">Facebook</button>
         <button class="social-btn google">Google</button>
         <button class="social-btn email">Email</button>

@@ -3,7 +3,7 @@
     <div v-if="recommendedClothes.length">
       <!-- Primera sección -->
       <div class="recommendation-section">
-        <h2 class="section-subtitle">Basados en tus favoritos:</h2>
+        <h2 class="section-subtitle">{{ $t('favorites.title') }}</h2>
         <div class="section-card">
           <div class="recommendations-grid">
             <ClotheCardSale
@@ -17,7 +17,7 @@
 
       <!-- Segunda sección -->
       <div class="recommendation-section">
-        <h2 class="section-subtitle">Otras recomendaciones:</h2>
+        <h2 class="section-subtitle">{{ $t('favorites.other') }}</h2>
         <div class="section-card">
           <div class="recommendations-grid">
             <ClotheCardSale
@@ -31,7 +31,7 @@
     </div>
 
     <div v-else class="no-recommendations">
-      <p>No hay recomendaciones por ahora.</p>
+      <p>{{ $t('favorites.empty') }}</p>
     </div>
   </div>
 </template>

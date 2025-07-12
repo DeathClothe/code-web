@@ -2,7 +2,7 @@
   <div class="start-container">
     <!-- Sección de Novedades -->
     <div class="section">
-      <h3>Novedades</h3>
+      <h3>{{ $t('home.news') }}</h3>
 
       <div class="carousel">
         <button class="carousel-arrow" @click="scrollLeft">
@@ -24,7 +24,7 @@
 
     <!-- Sección de Ofertas -->
     <div class="section">
-      <h3>Ofertas</h3>
+      <h3>{{ $t('home.sales') }}</h3>
       <div class="offer-grid">
         <div
             v-for="item in ofertas"
